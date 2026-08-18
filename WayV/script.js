@@ -801,12 +801,8 @@ saveBtn.addEventListener("click", async () => {
     /* 안내 문구, 이전/이후 버튼은 이미지에는 나오지 않도록 캡처 중에만 숨김 */
     area.classList.add("capturing");
 
-    /* 모바일에서는 .capture-area가 반응형(좁은 폭) CSS로 화면에 떠
-       있는 상태라, html2canvas의 windowWidth 옵션만으로는(특히 iOS
-       Safari에서) 항상 PC 레이아웃으로 안정적으로 재계산되지 않는다.
-       그래서 캡처 직전에 실제 DOM의 인라인 width를 탭별 기준 폭으로
-       강제로 넓혀서, 어떤 기기에서 저장하든 항상 동일한 폭/비율로
-       리플로우된 상태를 캡처하도록 한다. */
+    /* 화면(특히 모바일)에 적용돼 있던 축소/반응형 스타일을 잠시 걷어내고,
+       항상 PC 버전과 동일한 레이아웃(탭별 고정 폭)으로 저장되도록 한다. */
     const prevTransform = area.style.transform;
     const prevAreaWidth = area.style.width;
     area.style.transform = "none";

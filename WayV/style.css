@@ -529,6 +529,146 @@ button:hover {
 /* 이미지 저장(캡처) 시 안내 문구 / 이전-이후 버튼을 숨기는 상태.
    h1의 margin-bottom(18px)만 남아 제목과 표 사이 간격이
    너무 좁거나 멀지 않게 유지된다. */
+/* ===========================
+   이미지 저장(캡처) 시 PC 레이아웃 강제
+   -----------------------------------------------------
+   아래 @media (max-width: 768px) 규칙은 실제 기기 화면 폭을 기준으로
+   적용되기 때문에, 캡처 직전 JS에서 area의 width만 바꿔도 휴대폰에서는
+   여전히 이 미디어 쿼리가 적용된 채로 렌더링된다(표 칸 높이/글자 크기가
+   작게 나오고, 계산된 이미지 높이가 실제 필요한 높이보다 작아져
+   아래쪽 줄이 잘려 보이는 원인이 됨). 화면 폭과 무관하게 항상 적용되는
+   클래스 선택자(.capturing)로 데스크톱 값을 다시 명시해 둔다.
+=========================== */
+.capturing.capture-area {
+    padding: 28px 50px 34px !important;
+    border-radius: 24px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .08) !important;
+}
+
+.capturing .logo {
+    width: 170px !important;
+    margin: 0 auto 11px !important;
+}
+
+.capturing h1 {
+    font-size: 34px !important;
+    margin: 0 0 38px !important;
+}
+
+.capturing .chart-date {
+    font-size: 16px !important;
+    margin-left: 10px !important;
+}
+
+.capturing .guide-list p {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+}
+
+.capturing table {
+    width: 100% !important;
+    max-width: 980px !important;
+    min-width: 0 !important;
+    table-layout: fixed !important;
+}
+
+.capturing th {
+    height: 68px !important;
+    font-size: 23px !important;
+    padding: 0 !important;
+    word-break: normal !important;
+}
+
+.capturing th:first-child {
+    width: 140px !important;
+}
+
+.capturing td {
+    height: 68px !important;
+    font-size: 23px !important;
+    padding: 0 !important;
+}
+
+.capturing .table-nav {
+    max-width: 980px !important;
+    margin: 0 auto 8px !important;
+}
+
+.capturing .nav-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
+}
+
+.capturing .legend {
+    gap: 24px !important;
+    margin-top: 25px !important;
+}
+
+.capturing .legend-item {
+    font-size: 22px !important;
+    gap: 9px !important;
+}
+
+.capturing .color {
+    width: 27px !important;
+    height: 27px !important;
+    border-width: 2px !important;
+}
+
+.capturing .capture-id-bottom {
+    font-size: 14px !important;
+    margin: 26px 0 0 !important;
+}
+
+/* 공수(L-R) 취향표 전용 */
+.capturing .lr-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-rows: repeat(3, auto) !important;
+    grid-auto-flow: column !important;
+    gap: 46px 50px !important;
+}
+
+.capturing .lr-row {
+    gap: 22px !important;
+}
+
+.capturing .lr-avatar {
+    width: 128px !important;
+    height: 128px !important;
+    border-width: 4px !important;
+}
+
+.capturing .lr-content {
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+.capturing .lr-bar-wrap {
+    gap: 10px !important;
+    margin-bottom: 12px !important;
+}
+
+.capturing .lr-label-l,
+.capturing .lr-label-r {
+    font-size: 17px !important;
+}
+
+.capturing .lr-bar {
+    height: 32px !important;
+    border-radius: 8px !important;
+}
+
+.capturing .lr-text {
+    min-height: 150px !important;
+    font-size: 17px !important;
+    padding: 12px 14px 26px !important;
+}
+
+.capturing .lr-char-count {
+    font-size: 12px !important;
+}
+
 .capturing .guide-list,
 .capturing .table-nav {
     display: none;

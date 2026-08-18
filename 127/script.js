@@ -52,13 +52,13 @@ const defaultPhotos = [
  */
 const pairNames = [
     ["쟌쟌", "쟌툥", "쟌윹", "쟌도", "쟌재", "쟌정", "쟌맠", "쟌동"],
-    ["툥쟌", "툥툥", "툥윹", "용영", "툥재", "툥정", "툥맠", "툥동"],
+    ["툥쟌", "툥툥", "툥윹", "툥도", "툥재", "툥정", "툥맠", "툥동"],
     ["윹쟌", "윹툥", "윹윹", "윹도", "윹재", "윹정", "윹맠", "윹동"],
-    ["도쟌", "도툥", "도윹", "도도", "도재", "도젱", "도맠", "도동"],
-    ["재쟌", "재툥", "재윹", "재도", "재재", "잰정", "재맠", "재동"],
+    ["도쟌", "도툥", "도윹", "도도", "도재", "도정", "도맠", "도동"],
+    ["재쟌", "재툥", "재윹", "재도", "재재", "재정", "재맠", "재동"],
     ["정쟌", "정툥", "정윹", "정도", "정재", "정정", "정맠", "정동"],
     ["맠쟌", "맠툥", "맠윹", "맠도", "맠재", "맠정", "맠맠", "맠동"],
-    ["동쟌", "동툥", "동윹", "동도", "해재", "동정", "동맠", "동동"]
+    ["동쟌", "동툥", "동윹", "동도", "동재", "동정", "동맠", "동동"]
 ];
 
 const options = [
@@ -819,14 +819,13 @@ saveBtn.addEventListener("click", async () => {
     const prevAreaWidth = area.style.width;
     area.style.transform = "none";
 
-    /* 모바일에서는 .capture-area가 반응형(width:100%, 좁은 칸) CSS로
-       화면에 떠 있는 상태라, html2canvas의 windowWidth 옵션만으로는
-       (특히 iOS Safari에서) 항상 PC 레이아웃으로 안정적으로 재계산되지
-       않는다. 그래서 캡처 직전에 실제 DOM의 인라인 width를 목표 폭으로
-       강제로 넓혀서, 탭에 상관없이 항상 PC와 동일한 넓은 칸으로
-       리플로우된 상태를 캡처하도록 한다. (칠페스 1100px / 공수 1280px)
-       공수 취향표는 DREAM과 같은 1280px 기준으로 저장한다. */
-    area.style.width = `${currentTab === "lr" ? LR_SAVE_CAPTURE_WIDTH : DESKTOP_CAPTURE_WIDTH}px`;
+    // 공수 취향표는 DREAM과 같은 1280px 기준으로,
+    // 칠페스 취향표는 PC 기본 1100px 기준으로 항상 고정해서 저장한다.
+    // (모바일에서는 화면 표시용으로 표가 축소돼 있는데, 이 축소 스타일이
+    //  그대로 캡처되면 멤버 이름 칸이 좁아져 글자가 잘려 보이는 문제가 있었다.)
+    area.style.width = currentTab === "lr"
+        ? `${LR_SAVE_CAPTURE_WIDTH}px`
+        : `${DESKTOP_CAPTURE_WIDTH}px`;
 
     try {
         const captureWidth = currentTab === "lr" ? LR_SAVE_CAPTURE_WIDTH : DESKTOP_CAPTURE_WIDTH;
