@@ -10,8 +10,7 @@
 
 /* 공수(L-R) 취향표 기본 크기 */
 :root {
-    --lr-avatar-size: 140px;
-    --lr-content-width: 400px;
+    --lr-avatar-size: 128px;
 }
 
 body {
@@ -260,7 +259,7 @@ td:hover {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: repeat(3, auto);
     grid-auto-flow: column;
-    gap: 34px 40px;
+    gap: 46px 50px;
 }
 
 .lr-row {
@@ -308,9 +307,8 @@ td:hover {
 }
 
 .lr-content {
-    flex: 0 0 auto;
-    width: var(--lr-content-width);
-    max-width: var(--lr-content-width);
+    flex: 1;
+    min-width: 0;
 }
 
 .lr-bar-wrap {
@@ -364,7 +362,7 @@ td:hover {
 
 .lr-text {
     width: 100%;
-    min-height: 108px;
+    min-height: 150px;
     resize: none;
     overflow: hidden;
     border: 2px solid #e8c4a8;
