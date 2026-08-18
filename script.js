@@ -865,13 +865,21 @@ saveBtn.addEventListener("click", async () => {
     const prevTransform = area.style.transform;
     area.style.transform = "none";
 
+    /* 모바일에서는 .capture-area가 반응형(좁은 폭) CSS로 화면에 떠
+       있는 상태라, html2canvas의 windowWidth 옵션만으로는(특히 iOS
+       Safari에서) 항상 PC 레이아웃으로 안정적으로 재계산되지 않는다.
+       그래서 캡처 직전에 실제 DOM의 인라인 width를 탭별 기준 폭으로
+       강제로 넓혀서, 어떤 기기에서 저장하든 항상 동일한 폭/비율로
+       리플로우된 상태를 캡처하도록 한다. */
+    const prevAreaWidth = area.style.width;
+    let captureWidth = getCaptureWidth(currentTab);
+    area.style.width = `${captureWidth}px`;
+
     /* 엔페스 표는 멤버 수가 많아 .table-scroll 안에서 가로 스크롤되는데,
        캡처할 때는 스크롤 없이 표 전체가 다 보이도록 잠시 폭 제한을 풀어준다. */
     let tableScrollEl = null;
     let prevScrollOverflow = "";
     let prevScrollMaxWidth = "";
-    let prevAreaWidth = "";
-    let captureWidth = getCaptureWidth(currentTab);
 
     if (currentTab === "rps") {
         tableScrollEl = area.querySelector(".table-scroll");
@@ -884,7 +892,6 @@ saveBtn.addEventListener("click", async () => {
             const neededWidth = tableScrollEl.scrollWidth + 100; // 좌우 padding 여유분
             if (neededWidth > captureWidth) {
                 captureWidth = neededWidth;
-                prevAreaWidth = area.style.width;
                 area.style.width = `${captureWidth}px`;
             }
         }

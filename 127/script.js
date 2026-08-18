@@ -819,11 +819,14 @@ saveBtn.addEventListener("click", async () => {
     const prevAreaWidth = area.style.width;
     area.style.transform = "none";
 
-    // 공수 취향표만 DREAM과 같은 1280px 기준으로 저장한다.
-    // 화면 표시 크기와 일반(칠페스) 저장 폭은 원래대로 유지한다.
-    if (currentTab === "lr") {
-        area.style.width = `${LR_SAVE_CAPTURE_WIDTH}px`;
-    }
+    /* 모바일에서는 .capture-area가 반응형(width:100%, 좁은 칸) CSS로
+       화면에 떠 있는 상태라, html2canvas의 windowWidth 옵션만으로는
+       (특히 iOS Safari에서) 항상 PC 레이아웃으로 안정적으로 재계산되지
+       않는다. 그래서 캡처 직전에 실제 DOM의 인라인 width를 목표 폭으로
+       강제로 넓혀서, 탭에 상관없이 항상 PC와 동일한 넓은 칸으로
+       리플로우된 상태를 캡처하도록 한다. (칠페스 1100px / 공수 1280px)
+       공수 취향표는 DREAM과 같은 1280px 기준으로 저장한다. */
+    area.style.width = `${currentTab === "lr" ? LR_SAVE_CAPTURE_WIDTH : DESKTOP_CAPTURE_WIDTH}px`;
 
     try {
         const captureWidth = currentTab === "lr" ? LR_SAVE_CAPTURE_WIDTH : DESKTOP_CAPTURE_WIDTH;
