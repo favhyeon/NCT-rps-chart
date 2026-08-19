@@ -32,6 +32,10 @@ const members = [
     "사쿠야"
 ];
 
+/* 마크, 윈윈은 탈퇴 멤버라 체크박스로 포함/제외를 전환할 수 있다 */
+const MARK_INDEX = members.indexOf("마크");
+const WINWIN_INDEX = members.indexOf("윈윈");
+
 /* 멤버별 본인 이니셜 (닉네임, 행/열 숨기기 문구 · 기본 커플명 조합에 사용)
    재현/재민/재희, 유타/유우시처럼 앞글자가 겹치는 멤버는 겹치지 않는 글자로 대신 지정했어요.
    원하는 대로 자유롭게 바꿔서 쓰시면 됩니다. */
@@ -157,6 +161,23 @@ function getDisplayPairName(rowIndex, colIndex) {
     return pairNames[rowIndex][colIndex];
 }
 
+/* 마크 포함(탈퇴 멤버) 여부 - 체크박스로 켜고 끔.
+   기본값은 켜짐이라, 꺼본 적 없는 사용자는 "0"이 저장돼 있지 않다. */
+const MARK_KEY = "enfes-include-mark";
+let includeMark = localStorage.getItem(MARK_KEY) !== "0";
+
+/* 윈윈 포함(탈퇴 멤버) 여부 - 체크박스로 켜고 끔.
+   기본값은 켜짐이라, 꺼본 적 없는 사용자는 "0"이 저장돼 있지 않다. */
+const WINWIN_KEY = "enfes-include-winwin";
+let includeWinwin = localStorage.getItem(WINWIN_KEY) !== "0";
+
+/* 마크/윈윈 포함 토글을 반영해, 해당 멤버 인덱스를 표/공수에 보여줄지 판단한다. */
+function isMemberVisible(index) {
+    if (index === MARK_INDEX && !includeMark) return false;
+    if (index === WINWIN_INDEX && !includeWinwin) return false;
+    return true;
+}
+
 const table = document.getElementById("chartTable");
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
@@ -174,6 +195,8 @@ const dateToggle = document.getElementById("dateToggle");
 const dateTextRps = document.getElementById("dateTextRps");
 const dateTextLr = document.getElementById("dateTextLr");
 const selfPairToggle = document.getElementById("selfPairToggle");
+const markToggle = document.getElementById("markToggle");
+const winwinToggle = document.getElementById("winwinToggle");
 
 const undoBtn = document.getElementById("undoBtn");
 const redoBtn = document.getElementById("redoBtn");
@@ -297,6 +320,32 @@ if (selfPairToggle) {
 }
 
 /* ==========================================
+   마크 / 윈윈 포함(탈퇴 멤버) 토글
+========================================== */
+
+if (markToggle) {
+    markToggle.checked = includeMark;
+
+    markToggle.addEventListener("change", () => {
+        includeMark = markToggle.checked;
+        localStorage.setItem(MARK_KEY, includeMark ? "1" : "0");
+        createTable();
+        createLrGrid();
+    });
+}
+
+if (winwinToggle) {
+    winwinToggle.checked = includeWinwin;
+
+    winwinToggle.addEventListener("change", () => {
+        includeWinwin = winwinToggle.checked;
+        localStorage.setItem(WINWIN_KEY, includeWinwin ? "1" : "0");
+        createTable();
+        createLrGrid();
+    });
+}
+
+/* ==========================================
    서브 유닛 전환 (엔페스 / 칠페스 / 드페스 / 웨페스 / 잇페스)
    엔페스: 이 사이트(127+드림+웨이션브이+위시 25명 전체).
    칠페스: NCT127, 드페스: NCT DREAM, 웨페스: NCT WayV, 잇페스: NCT WISH
@@ -384,8 +433,8 @@ tabLr.addEventListener("click", () => switchTab("lr"));
 function createTable() {
     table.innerHTML = "";
 
-    const visibleColIndexes = members.map((_, i) => i).filter(i => !hiddenCols.has(i));
-    const visibleRowIndexes = members.map((_, i) => i).filter(i => !hiddenRows.has(i));
+    const visibleColIndexes = members.map((_, i) => i).filter(i => !hiddenCols.has(i) && isMemberVisible(i));
+    const visibleRowIndexes = members.map((_, i) => i).filter(i => !hiddenRows.has(i) && isMemberVisible(i));
 
     const head = document.createElement("tr");
     const empty = document.createElement("th");
@@ -678,6 +727,8 @@ function createLrGrid() {
     lrGrid.innerHTML = "";
 
     members.forEach((member, index) => {
+        if (!isMemberVisible(index)) return;
+
         const row = document.createElement("div");
         row.className = "lr-row";
 
