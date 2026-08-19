@@ -1,161 +1,132 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>엔페스 통합 취향표</title>
 
-    <title>NCT 취향표</title>
+<meta property="og:title" content="엔페스 통합 취향표">
+<meta property="og:description" content="NCT 127 · WayV · DREAM · WISH 25인 통합 취향표">
+<meta property="og:image" content="assets/m2.png">
+<link rel="icon" href="assets/m1.png">
 
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="NCT 취향표">
-    <meta property="og:description" content="나만의 NCT 취향표를 만들어 보세요!">
-    <meta property="og:image" content="https://favhyeon.github.io/NCT-rps-chart/assets/og.png">
-    <meta property="og:image:width" content="1280">
-    <meta property="og:image:height" content="720">
-    <meta property="og:url" content="https://favhyeon.github.io/NCT-rps-chart/">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="NCT 취향표">
-    <meta name="twitter:description" content="나만의 NCT 취향표를 만들어 보세요!">
-    <meta name="twitter:image" content="https://favhyeon.github.io/NCT-rps-chart/assets/og.png">
-
-    <link rel="stylesheet" href="style.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<div class="wrapper">
 
-    <!-- 탭 전환 -->
+<div class="page">
+
+    <header class="page-header">
+        <h1>엔페스 통합 취향표<span id="dateTextRps" class="date-ver"></span></h1>
+        <p class="page-sub">NCT 127 · WayV · DREAM · WISH — 25인</p>
+    </header>
+
     <div class="tab-wrap">
-        <button id="tabRps" class="tab-btn active">엔페스 취향표</button>
+        <button id="tabRps" class="tab-btn active">취향표</button>
         <button id="tabLr" class="tab-btn">공수 취향표</button>
     </div>
 
-    <div id="scaleWrap" class="scale-wrap">
+    <div class="toggle-row">
+        <label class="switch-toggle" id="dateToggleWrap">
+            <input type="checkbox" id="dateToggle">
+            <span>날짜 표시</span>
+        </label>
+        <label class="switch-toggle">
+            <input type="checkbox" id="selfPairToggle">
+            <span>자공자수 표시</span>
+        </label>
+    </div>
 
-        <!-- ===== 엔페스 취향표 ===== -->
-        <div id="captureArea" class="capture-area">
+    <div class="group-switch">
+        <span class="group-switch-label">유닛 전환</span>
+        <div class="group-switch-options">
+            <label class="group-chip">
+                <input type="checkbox" id="groupEnpes">
+                <span>엔페스</span>
+            </label>
+            <label class="group-chip">
+                <input type="checkbox" id="groupChil">
+                <span>칠페스</span>
+            </label>
+            <label class="group-chip">
+                <input type="checkbox" id="groupDeu">
+                <span>드페스</span>
+            </label>
+            <label class="group-chip">
+                <input type="checkbox" id="groupWe">
+                <span>웨페스</span>
+            </label>
+            <label class="group-chip">
+                <input type="checkbox" id="groupIt">
+                <span>잇페스</span>
+            </label>
+        </div>
+    </div>
 
-            <img id="logoRps" src="assets/logo.png" class="logo" alt="NCT">
+    <div class="guide-box" id="guideListRps"></div>
 
-            <h1>엔페스 취향표<span id="dateTextRps" class="chart-date"></span></h1>
-
-            <div class="guide-list" id="guideListRps"></div>
+    <div class="scale-wrap" id="scaleWrap">
+        <!-- ===================== RPS 취향표 ===================== -->
+        <div class="capture-area" id="captureArea">
+            <div class="capture-title">
+                <h2>엔페스 취향표</h2>
+            </div>
 
             <div class="table-wrap">
-                <div class="table-nav">
-                    <button id="undoBtn" class="nav-btn" title="이전" disabled>&#10094;</button>
-                    <button id="redoBtn" class="nav-btn" title="이후" disabled>&#10095;</button>
-                </div>
-                <div class="table-scroll">
-                    <table id="chartTable"></table>
-                </div>
+                <table id="chartTable"></table>
             </div>
 
             <div class="legend" id="legendRps"></div>
-
-            <div class="capture-id-bottom">@8afmoz</div>
         </div>
 
-        <!-- ===== 공수 취향표 ===== -->
-        <div id="captureAreaLr" class="capture-area hidden">
+        <!-- ===================== 공수(L-R) 취향표 ===================== -->
+        <div class="capture-area hidden" id="captureAreaLr">
+            <div class="capture-title">
+                <h2>엔페스 공수 취향표<span id="dateTextLr" class="date-ver"></span></h2>
+            </div>
 
-            <img id="logoLr" src="assets/logo.png" class="logo" alt="NCT">
+            <div class="guide-box lr-guide" id="guideListLr"></div>
 
-            <h1>공수 취향표<span id="dateTextLr" class="chart-date"></span></h1>
-
-            <div class="guide-list" id="guideListLr"></div>
-
-            <div id="lrGrid" class="lr-grid"></div>
-
-            <div class="capture-id-bottom">@8afmoz</div>
+            <div class="lr-grid" id="lrGrid"></div>
         </div>
-
-    </div>
-
-    <div class="date-toggle-wrap" id="dateToggleWrap">
-        <label class="date-toggle">
-            <input type="checkbox" id="dateToggle">
-            이미지에 날짜 표시
-        </label>
-        <label class="date-toggle">
-            <input type="checkbox" id="selfPairToggle">
-            자공자수 표시
-        </label>
-    </div>
-
-    <!-- 유닛별 전용 페이지로 이동 (체크하면 해당 유닛만의 취향표 페이지로 이동합니다) -->
-    <div class="unit-toggle-wrap" id="unitToggleWrap">
-        <label class="date-toggle unit-toggle">
-            <input type="checkbox" id="unitToggle1" data-unit="unit127">
-            NCT 127
-        </label>
-        <label class="date-toggle unit-toggle">
-            <input type="checkbox" id="unitToggle2" data-unit="unitDream">
-            NCT DREAM
-        </label>
-        <label class="date-toggle unit-toggle">
-            <input type="checkbox" id="unitToggle3" data-unit="unitWayV">
-            WayV
-        </label>
-        <label class="date-toggle unit-toggle">
-            <input type="checkbox" id="unitToggle4" data-unit="unitWish">
-            NCT WISH
-        </label>
-    </div>
-
-    <!-- 탈퇴 멤버 개별 포함/제외 -->
-    <div class="member-toggle-wrap" id="memberToggleWrap">
-        <label class="date-toggle member-toggle">
-            <input type="checkbox" id="memberToggleShotaro" data-member="19" checked>
-            쇼타로 포함
-        </label>
-        <label class="date-toggle member-toggle">
-            <input type="checkbox" id="memberToggleSungchan" data-member="20" checked>
-            성찬 포함
-        </label>
-        <label class="date-toggle member-toggle">
-            <input type="checkbox" id="memberToggleMark" data-member="9" checked>
-            마크 포함
-        </label>
-        <label class="date-toggle member-toggle">
-            <input type="checkbox" id="memberToggleWinwin" data-member="7" checked>
-            윈윈 포함
-        </label>
     </div>
 
     <div class="button-wrap">
-        <button id="saveBtn"><span class="btn-icon">&#8681;</span>이미지 저장</button>
-        <button id="resetBtn"><span class="btn-icon">&#8635;</span>초기화</button>
-    </div>
-
-    <!-- 사진 업로드용 숨김 input -->
-    <input type="file" id="photoInput" accept="image/*" class="hidden">
-
-    <!-- 색상 선택 모달 -->
-    <div id="modal" class="modal hidden">
-        <div class="modal-box">
-            <button id="closeModal" class="close-btn" aria-label="닫기">×</button>
-
-            <div id="modalTitle" class="modal-title"></div>
-
-            <div id="optionGrid" class="option-grid"></div>
-        </div>
-    </div>
-
-    <!-- 저장 완료 모달 -->
-    <div id="saveModal" class="modal hidden">
-        <div class="save-box">
-            <h2>이미지가 준비되었습니다!</h2>
-            <p>저장이 자동으로 되지 않았다면, 아래 이미지를 길게 눌러 '이미지 저장'을 선택해주세요.</p>
-            <img id="previewImage" alt="저장된 취향표 미리보기">
-            <button id="closeSaveModal">확인</button>
-        </div>
+        <button id="undoBtn" class="icon-btn" disabled title="이전">↺</button>
+        <button id="redoBtn" class="icon-btn" disabled title="이후">↻</button>
+        <button id="resetBtn" class="ghost-btn">초기화</button>
+        <button id="saveBtn" class="primary-btn">이미지 저장</button>
     </div>
 
 </div>
 
+<!-- 색상 선택 모달 -->
+<div class="modal hidden" id="modal">
+    <div class="modal-content">
+        <div class="modal-head">
+            <h3 id="modalTitle"></h3>
+            <button id="closeModal" class="modal-close">&times;</button>
+        </div>
+        <div class="option-grid" id="optionGrid"></div>
+    </div>
+</div>
+
+<!-- 저장 완료 모달 -->
+<div class="modal hidden" id="saveModal">
+    <div class="modal-content save-modal-content">
+        <div class="modal-head">
+            <h3>이미지가 저장됐어요</h3>
+            <button id="closeSaveModal" class="modal-close">&times;</button>
+        </div>
+        <img id="previewImage" alt="미리보기">
+    </div>
+</div>
+
+<input type="file" id="photoInput" accept="image/*" class="visually-hidden">
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

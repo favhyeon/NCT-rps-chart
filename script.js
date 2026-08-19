@@ -1,84 +1,62 @@
 /* ==========================================
-   NCT 엔페스 취향표 (127 / DREAM / WayV / WISH 통합)
+   엔페스 통합 취향표 (NCT ALL - 127+WayV+DREAM+WISH, 25명)
 ========================================== */
 
-const members = [
-    "쟈니", "태용", "유타", "쿤", "도영", "텐", "재현", "윈윈", "정우",
-    "마크", "샤오쥔", "헨드리", "런쥔", "제노", "해찬", "재민", "양양",
-    "천러", "지성", "쇼타로", "성찬", "시온", "리쿠", "유우시", "재희",
-    "료", "사쿠야"
-];
+/* 표(행/열 헤더)에 표시할 멤버 이름 */
+const members = ["쟈니", "태용", "유타", "쿤", "도영", "텐", "재현", "윈윈", "정우", "마크", "샤오쥔", "헨드리", "런쥔", "제노", "해찬", "재민", "양양", "천러", "지성", "시온", "리쿠", "유우시", "재희", "료", "사쿠야"];
 
-/* 멤버별 본인 이니셜 (본인조합, 행/열 숨기기 문구, 씨피명 자동생성에 사용) */
-const ownInitials = [
-    "쟌", "툥", "윹", "쿤", "도", "텐", "재", "윈", "젱",
-    "맠", "샤", "헨", "런", "젠", "동", "잼", "양",
-    "천", "성", "숕", "숑", "숀", "쿨", "윳", "댕",
-    "료", "샄"
-];
+/* 각 멤버가 속한 유닛 (그룹 전환 링크에는 안 쓰이지만, 참고용으로 남겨둠) */
+const memberUnits = ["127", "127", "127", "WayV", "127", "WayV", "127", "WayV", "127", "127", "WayV", "WayV", "DREAM", "DREAM", "127", "DREAM", "WayV", "DREAM", "DREAM", "WISH", "WISH", "WISH", "WISH", "WISH", "WISH"];
 
-/* 멤버별 기본 아바타 색상 (사진 로드 실패 시 대체용, 멤버 수보다 적으면 순서대로 반복됩니다) */
-const memberColors = [
-    "#ff9ec8", "#87d8ff", "#ffd54f", "#8bd66d", "#c9a4ff",
-    "#ff8a65", "#f48fb1", "#80cbc4", "#ffb74d"
-];
+/* 멤버별 본인 이니셜 (닉네임, 행/열 숨기기 문구에 사용) */
+const ownInitials = ["쟌", "툥", "윹", "쿤", "도", "텐", "재", "윈", "정", "맠", "샤", "헨", "런", "젠", "동", "잼", "양", "천", "지", "숀", "쿨", "윳", "댕", "료", "샄"];
 
-/* 멤버별 기본 프로필 사진 (members 배열과 순서 동일).
-   assets 폴더에 member01.png ~ member27.png 로 사진을 넣으면 순서대로 적용돼요.
-   사진이 없으면 자동으로 이니셜이 들어간 동그란 기본 아바타가 대신 나와요. */
-const defaultPhotos = members.map((_, i) => `assets/member${String(i + 1).padStart(2, "0")}.png`);
+/* 멤버별 기본 아바타 색상 (사진 로드 실패 시 대체용) - 그라데이션 없이 검정 통일 */
+const memberColors = members.map(() => "#111111");
+
+/* 멤버별 기본 프로필 사진 (members 배열과 순서 동일) */
+const defaultPhotos = members.map((_, i) => `assets/m${i + 1}.png`);
 
 /*
- * ==========================================
- * 씨피(커플)명 설정
- * ==========================================
- * 기본적으로는 "행 멤버 이니셜 + 열 멤버 이니셜" 형태로 자동 생성돼요.
- * (대각선, 즉 본인×본인 칸도 마찬가지로 본인 이니셜을 두 번 합쳐서 만들어요.)
- *
- * 특정 조합만 자동생성 결과 대신 다른 이름을 쓰고 싶다면,
- * 아래 pairNameOverrides 에 "행 멤버-열 멤버": "원하는이름" 형식으로 추가하면 돼요.
- * 멤버 이름을 그대로 적기 때문에 배열 순서나 인덱스를 확인할 필요가 없어요.
- * 양방향(예: 마크→헨드리 / 헨드리→마크)을 다르게 쓰고 싶으면 두 줄 다 넣어주면 돼요.
+ * 표에 표시할 커플명.
+ * [행 멤버][열 멤버] 순서.
+ * 칠페스(127)/드페스(DREAM)/잇페스(WISH) 안에서 이미 실제 값이 있던 조합은 그 값을 그대로 가져왔고,
+ * 나머지(웨페스 내부 조합 및 유닛을 넘나드는 조합)는 이니셜 두 개를 이어붙인 기본값이에요.
+ * 원하는 조합명으로 자유롭게 바꿔서 쓰시면 돼요.
  */
-const pairNameOverrides = {
-    "사쿠야-리쿠": "샄맄",
-    "리쿠-사쿠야": "맄샄",
-    "리쿠-유우시": "쿨융",
-    "해찬-재현": "해재",
-    "재현-정우": "잰정",
-    "도영-정우": "도젱",
-    "태용-도영": "용영",
-    /*
-     * ==========================================
-     * 씨피명 수정은 여기만 건드리면 돼요!
-     * ==========================================
-     * "행 멤버-열 멤버": "원하는 씨피명"
-     *
-     * 멤버 이름을 그대로 적기 때문에 인덱스 번호를 셀 필요가 없어요.
-     * 예:
-     * "마크-헨드리": "맠헨",
-     * "헨드리-마크": "헨맠",
-     *
-     * 한쪽 방향만 바꾸면 그 방향만 변경되고,
-     * 양방향을 같은 이름으로 쓰려면 두 줄 모두 적어주세요.
-     */
-    // "마크-헨드리": "맠헨",
-    // "헨드리-마크": "헨맠",
-
-    // 아래에 수정할 씨피명을 계속 추가하세요.
-};
-
-function getPairName(rowIndex, colIndex) {
-    const key = `${members[rowIndex]}-${members[colIndex]}`;
-    if (pairNameOverrides[key]) return pairNameOverrides[key];
-    return ownInitials[rowIndex] + ownInitials[colIndex];
-}
+const pairNames = [
+    ["쟌쟌", "쟌툥", "쟌윹", "쟌쿤", "쟌도", "쟌텐", "쟌재", "쟌윈", "쟌정", "쟌맠", "쟌샤", "쟌헨", "쟌런", "쟌젠", "쟌동", "쟌잼", "쟌양", "쟌천", "쟌지", "쟌숀", "쟌쿨", "쟌윳", "쟌댕", "쟌료", "쟌샄"],
+    ["툥쟌", "툥툥", "툥윹", "툥쿤", "툥도", "툥텐", "툥재", "툥윈", "툥정", "툥맠", "툥샤", "툥헨", "툥런", "툥젠", "툥동", "툥잼", "툥양", "툥천", "툥지", "툥숀", "툥쿨", "툥윳", "툥댕", "툥료", "툥샄"],
+    ["윹쟌", "윹툥", "윹윹", "윹쿤", "윹도", "윹텐", "윹재", "윹윈", "윹정", "윹맠", "윹샤", "윹헨", "윹런", "윹젠", "윹동", "윹잼", "윹양", "윹천", "윹지", "윹숀", "윹쿨", "윹윳", "윹댕", "윹료", "윹샄"],
+    ["쿤쟌", "쿤툥", "쿤윹", "쿤쿤", "쿤도", "쿤텐", "쿤재", "쿤윈", "쿤정", "쿤맠", "쿤샤", "쿤헨", "쿤런", "쿤젠", "쿤동", "쿤잼", "쿤양", "쿤천", "쿤지", "쿤숀", "쿤쿨", "쿤윳", "쿤댕", "쿤료", "쿤샄"],
+    ["도쟌", "도툥", "도윹", "도쿤", "도도", "도텐", "도재", "도윈", "도정", "도맠", "도샤", "도헨", "도런", "도젠", "도동", "도잼", "도양", "도천", "도지", "도숀", "도쿨", "도윳", "도댕", "도료", "도샄"],
+    ["텐쟌", "텐툥", "텐윹", "텐쿤", "텐도", "텐텐", "텐재", "텐윈", "텐정", "텐맠", "텐샤", "텐헨", "텐런", "텐젠", "텐동", "텐잼", "텐양", "텐천", "텐지", "텐숀", "텐쿨", "텐윳", "텐댕", "텐료", "텐샄"],
+    ["재쟌", "재툥", "재윹", "재쿤", "재도", "재텐", "재재", "재윈", "재정", "재맠", "재샤", "재헨", "재런", "재젠", "재동", "재잼", "재양", "재천", "재지", "재숀", "재쿨", "재윳", "재댕", "재료", "재샄"],
+    ["윈쟌", "윈툥", "윈윹", "윈쿤", "윈도", "윈텐", "윈재", "윈윈", "윈정", "윈맠", "윈샤", "윈헨", "윈런", "윈젠", "윈동", "윈잼", "윈양", "윈천", "윈지", "윈숀", "윈쿨", "윈윳", "윈댕", "윈료", "윈샄"],
+    ["정쟌", "정툥", "정윹", "정쿤", "정도", "정텐", "정재", "정윈", "정정", "정맠", "정샤", "정헨", "정런", "정젠", "정동", "정잼", "정양", "정천", "정지", "정숀", "정쿨", "정윳", "정댕", "정료", "정샄"],
+    ["맠쟌", "맠툥", "맠윹", "맠쿤", "맠도", "맠텐", "맠재", "맠윈", "맠정", "맠맠", "맠샤", "맠헨", "맠런", "맠젠", "맠동", "맠잼", "맠양", "맠천", "맠성", "맠숀", "맠쿨", "맠윳", "맠댕", "맠료", "맠샄"],
+    ["샤쟌", "샤툥", "샤윹", "샤쿤", "샤도", "샤텐", "샤재", "샤윈", "샤정", "샤맠", "샤샤", "샤헨", "샤런", "샤젠", "샤동", "샤잼", "샤양", "샤천", "샤지", "샤숀", "샤쿨", "샤윳", "샤댕", "샤료", "샤샄"],
+    ["헨쟌", "헨툥", "헨윹", "헨쿤", "헨도", "헨텐", "헨재", "헨윈", "헨정", "헨맠", "헨샤", "헨헨", "헨런", "헨젠", "헨동", "헨잼", "헨양", "헨천", "헨지", "헨숀", "헨쿨", "헨윳", "헨댕", "헨료", "헨샄"],
+    ["런쟌", "런툥", "런윹", "런쿤", "런도", "런텐", "런재", "런윈", "런정", "런맠", "런샤", "런헨", "런런", "런젠", "런동", "런잼", "런양", "런천", "런성", "런숀", "런쿨", "런윳", "런댕", "런료", "런샄"],
+    ["젠쟌", "젠툥", "젠윹", "젠쿤", "젠도", "젠텐", "젠재", "젠윈", "젠정", "젠맠", "젠샤", "젠헨", "젠런", "젠젠", "젠동", "젠잼", "젠양", "젠천", "젠성", "젠숀", "젠쿨", "젠윳", "젠댕", "젠료", "젠샄"],
+    ["동쟌", "동툥", "동윹", "동쿤", "동도", "동텐", "동재", "동윈", "동정", "동맠", "동샤", "동헨", "동런", "동젠", "동동", "동잼", "동양", "동천", "동지", "동숀", "동쿨", "동윳", "동댕", "동료", "동샄"],
+    ["잼쟌", "잼툥", "잼윹", "잼쿤", "잼도", "잼텐", "잼재", "잼윈", "잼정", "잼맠", "잼샤", "잼헨", "잼런", "잼젠", "잼동", "잼잼", "잼양", "잼천", "잼성", "잼숀", "잼쿨", "잼윳", "잼댕", "잼료", "잼샄"],
+    ["양쟌", "양툥", "양윹", "양쿤", "양도", "양텐", "양재", "양윈", "양정", "양맠", "양샤", "양헨", "양런", "양젠", "양동", "양잼", "양양", "양천", "양지", "양숀", "양쿨", "양윳", "양댕", "양료", "양샄"],
+    ["천쟌", "천툥", "천윹", "천쿤", "천도", "천텐", "천재", "천윈", "천정", "천맠", "천샤", "천헨", "천런", "천젠", "천동", "천잼", "천양", "천천", "천지", "천숀", "천쿨", "천윳", "천댕", "천료", "천샄"],
+    ["지쟌", "지툥", "지윹", "지쿤", "지도", "지텐", "지재", "지윈", "지정", "성맠", "지샤", "지헨", "성런", "성젠", "지동", "성잼", "지양", "지천", "성성", "지숀", "지쿨", "지윳", "지댕", "지료", "지샄"],
+    ["숀쟌", "숀툥", "숀윹", "숀쿤", "숀도", "숀텐", "숀재", "숀윈", "숀정", "숀맠", "숀샤", "숀헨", "숀런", "숀젠", "숀동", "숀잼", "숀양", "숀천", "숀지", "숀숀", "숀쿨", "온윳", "숀댕", "숀료", "숀샄"],
+    ["쿨쟌", "쿨툥", "쿨윹", "쿨쿤", "쿨도", "쿨텐", "쿨재", "쿨윈", "쿨정", "쿨맠", "쿨샤", "쿨헨", "쿨런", "쿨젠", "쿨동", "쿨잼", "쿨양", "쿨천", "쿨지", "쿨숀", "쿨쿨", "쿨융", "쿨댕", "쿨료", "맄샄"],
+    ["윳쟌", "윳툥", "윳윹", "윳쿤", "윳도", "윳텐", "윳재", "윳윈", "윳정", "윳맠", "윳샤", "윳헨", "윳런", "윳젠", "윳동", "윳잼", "윳양", "윳천", "윳지", "윳숀", "윳쿨", "윳윳", "윳댕", "윳료", "윳샄"],
+    ["댕쟌", "댕툥", "댕윹", "댕쿤", "댕도", "댕텐", "댕재", "댕윈", "댕정", "댕맠", "댕샤", "댕헨", "댕런", "댕젠", "댕동", "댕잼", "댕양", "댕천", "댕지", "댕숀", "댕쿨", "댕윳", "댕댕", "댕료", "댕샄"],
+    ["료쟌", "료툥", "료윹", "료쿤", "료도", "료텐", "료재", "료윈", "료정", "료맠", "료샤", "료헨", "료런", "료젠", "료동", "료잼", "료양", "료천", "료지", "료숀", "료쿨", "료윳", "료댕", "료료", "료샄"],
+    ["샄쟌", "샄툥", "샄윹", "샄쿤", "샄도", "샄텐", "샄재", "샄윈", "샄정", "샄맠", "샄샤", "샄헨", "샄런", "샄젠", "샄동", "샄잼", "샄양", "샄천", "샄지", "샄숀", "샄맄", "샄윳", "샄댕", "샄료", "샄샄"]
+];
 
 const options = [
     { name: "OTP",      color: "#f7cde0" },
     { name: "좋아함",   color: "#ffafaf" },
     { name: "호감",     color: "#fcee90" },
-    { name: "관심있음", color: "#baebbb" },
+    { name: "가능", color: "#baebbb" },
     { name: "관심없음", color: "#ffffff" },
     { name: "별로",     color: "#bfeefd" },
     { name: "지뢰",     color: "#999999" }
@@ -87,7 +65,7 @@ const options = [
 /* 사용자가 직접 고른 커스텀 색상 (name -> hex).
    여기에 값이 있으면 기본 color 대신 이 색을 쓴다.
    options 배열의 기본값 자체는 절대 덮어쓰지 않는다. */
-const CUSTOM_COLOR_KEY = "nct-custom-colors";
+const CUSTOM_COLOR_KEY = "npace-custom-colors";
 let customColors = JSON.parse(localStorage.getItem(CUSTOM_COLOR_KEY)) || {};
 
 function getOptionColor(option) {
@@ -104,18 +82,19 @@ function resetCustomColors() {
     localStorage.removeItem(CUSTOM_COLOR_KEY);
 }
 
-const STORAGE_KEY = "nct-rps";
-const LR_STORAGE_KEY = "nct-lr-rps";
+const STORAGE_KEY = "npace-enpes-rps";
+const LR_STORAGE_KEY = "npace-lr-rps";
 const LR_CELL_COUNT = 12;
 
-/* 행/열 개별 숨기기 상태 (멤버 인덱스 기준, rows/cols 따로 관리).
-   유닛/탈퇴 멤버 체크박스도 결국 이 hiddenRows/hiddenCols 를 함께 켜고 끄는 방식으로 동작한다. */
-/* v2: 예전 버전에서 저장된 숨김 상태를 초기화해서, 27명 전체 멤버가
-   다시 정상적으로 다 보이도록 한다 (버전 올리기 전 저장된 값은 무시됨). */
-const HIDDEN_KEY = "nct-hidden-members-v2";
+/* 행/열 개별 숨기기 상태 (멤버 인덱스 기준, rows/cols 따로 관리) */
+const HIDDEN_KEY = "npace-hidden-members";
 const hiddenSaved = JSON.parse(localStorage.getItem(HIDDEN_KEY)) || { rows: [], cols: [] };
 let hiddenRows = new Set(hiddenSaved.rows);
 let hiddenCols = new Set(hiddenSaved.cols);
+
+function isMemberActive() {
+    return true;
+}
 
 function saveHiddenState() {
     localStorage.setItem(HIDDEN_KEY, JSON.stringify({
@@ -124,18 +103,66 @@ function saveHiddenState() {
     }));
 }
 
-/* 자공자수(본인조합, 대각선 칸) 표시 여부 - 체크박스로 켜고 끔
-   기본값은 켜짐(기존 동작과 동일)이라, 꺼본 적 없는 사용자는 "0"이 저장돼 있지 않다. */
-const SELF_PAIR_KEY = "nct-include-selfpair";
+/* 자공자수(본인조합, 대각선 칸) 표시 여부 - 체크박스로 켜고 끔 */
+const SELF_PAIR_KEY = "npace-include-selfpair";
 let includeSelfPair = localStorage.getItem(SELF_PAIR_KEY) !== "0";
 
-/* 대각선(본인×본인) 칸을 표시할지 여부에 따라 실제로 화면/이미지에 그릴 텍스트를 반환한다.
-   토글이 꺼져 있으면 "-"를 보여준다. */
 function getDisplayPairName(rowIndex, colIndex) {
     if (rowIndex === colIndex && !includeSelfPair) {
         return "-";
     }
-    return getPairName(rowIndex, colIndex);
+    return pairNames[rowIndex][colIndex];
+}
+
+/* ==========================================
+   그룹 전환 (엔페스 / 칠페스 / 드페스 / 웨페스 / 잇페스)
+   엔페스를 제외한 나머지 4개는 각 유닛 공식 취향표 주소로 이동한다.
+========================================== */
+const GROUP_LINKS = {
+    "127":  "https://favhyeon.github.io/NCT127-rps-chart/",
+    "wish": "https://favhyeon.github.io/NCTWISH-RPS-CHART/",
+    "dream":"https://favhyeon.github.io/NCTDREAM-rps-chart/",
+    "wayv": "https://favhyeon.github.io/NCTWayV-rps-chart/"
+};
+
+const groupCheckboxes = {
+    enpes: document.getElementById("groupEnpes"),
+    chil:  document.getElementById("groupChil"),
+    deu:   document.getElementById("groupDeu"),
+    we:    document.getElementById("groupWe"),
+    it:    document.getElementById("groupIt")
+};
+
+function setupGroupSwitcher() {
+    const all = Object.values(groupCheckboxes).filter(Boolean);
+    if (!all.length) return;
+
+    if (groupCheckboxes.enpes) groupCheckboxes.enpes.checked = true;
+
+    all.forEach(cb => {
+        cb.addEventListener("change", () => {
+            if (!cb.checked) {
+                // 하나는 항상 켜져 있어야 하므로, 자기 자신을 못 끄게 막는다.
+                cb.checked = true;
+                return;
+            }
+
+            all.forEach(other => {
+                if (other !== cb) other.checked = false;
+            });
+
+            if (cb === groupCheckboxes.chil) {
+                window.location.href = GROUP_LINKS["127"];
+            } else if (cb === groupCheckboxes.deu) {
+                window.location.href = GROUP_LINKS["dream"];
+            } else if (cb === groupCheckboxes.we) {
+                window.location.href = GROUP_LINKS["wayv"];
+            } else if (cb === groupCheckboxes.it) {
+                window.location.href = GROUP_LINKS["wish"];
+            }
+            /* 엔페스를 다시 선택한 경우는 현재 페이지이므로 아무 것도 하지 않는다. */
+        });
+    });
 }
 
 const table = document.getElementById("chartTable");
@@ -171,21 +198,13 @@ const lrGrid = document.getElementById("lrGrid");
 const photoInput = document.getElementById("photoInput");
 const scaleWrap = document.getElementById("scaleWrap");
 
-/* CSS의 @media (max-width: 768px)과 동일한 기준.
-   이 폭 이하에서는 JS로 축소하지 않고, 반응형 레이아웃을 그대로 사용한다. */
 const MOBILE_BREAKPOINT = 768;
-/* 엔페스 표(rps)와 공수 취향표(lr, 6열 그리드)는 필요한 가로 폭이 달라서
-   탭별로 기본 캡처/표시 폭을 따로 둔다 (style.css의 .capture-area / #captureAreaLr와 짝을 이룸). */
-const DESKTOP_CAPTURE_WIDTHS = { rps: 1200, lr: 1280 };
+const DESKTOP_CAPTURE_WIDTH = 1100;
 
-function getCaptureWidth(tab) {
-    return DESKTOP_CAPTURE_WIDTHS[tab] || DESKTOP_CAPTURE_WIDTHS.rps;
-}
-
-let currentTarget = null; // { type: "cell", td } | { type: "row", index } | { type: "col", index }
+let currentTarget = null;
 let currentTab = "rps";
 let currentPhotoIndex = null;
-let currentBlobUrl = null; // 저장 미리보기/다운로드에 쓰이는 Blob URL (재사용 전 해제)
+let currentBlobUrl = null;
 
 const HISTORY_LIMIT = 50;
 let historyStack = [];
@@ -220,8 +239,6 @@ function renderGuide(tab) {
     });
 }
 
-/* 범례를 options 배열(+커스텀 색상) 기준으로 매번 새로 그린다.
-   색이 바뀌어도 범례가 항상 실제 색과 일치하도록. */
 function renderLegend() {
     if (!legendRps) return;
     legendRps.innerHTML = "";
@@ -271,70 +288,13 @@ if (selfPairToggle) {
     });
 }
 
-/* ==========================================
-   유닛 이동 / 탈퇴 멤버 표시 체크박스
-   - 유닛 체크박스: 표를 필터링하는 게 아니라, 이미 따로 만들어둔 해당 유닛의
-     전용 페이지(예: 127/index.html)로 바로 이동한다. 그 페이지에는 그 유닛만의
-     멤버와 이미 저장해둔 취향 데이터가 그대로 들어있다.
-   - 탈퇴 멤버 체크박스: 멤버 한 명의 행/열만 개별로 표시·숨김 (기존과 동일).
-========================================== */
-
-/* 유닛 체크박스를 누르면 이동할 전용 페이지 경로 (이 파일 기준 상대경로) */
-const UNIT_PAGES = {
-    unit127:   "127/index.html",
-    unitDream: "DREAM/index.html",
-    unitWayV:  "WayV/index.html",
-    unitWish:  "WISH/index.html"
-};
-
-const unitToggleInputs = Array.from(document.querySelectorAll("#unitToggleWrap input[type=checkbox]"));
-const memberToggleInputs = Array.from(document.querySelectorAll("#memberToggleWrap input[type=checkbox]"));
-
-function setMemberHidden(index, hidden) {
-    if (hidden) {
-        hiddenRows.add(index);
-        hiddenCols.add(index);
-    } else {
-        hiddenRows.delete(index);
-        hiddenCols.delete(index);
-    }
-}
-
-/* 체크박스 겉모습(active 클래스)과 실제 hiddenRows/hiddenCols 상태를 맞춘다.
-   페이지를 새로고침했거나, 다른 체크박스 조작으로 상태가 바뀌었을 때 호출한다. */
-function syncToggleCheckboxes() {
-    memberToggleInputs.forEach(input => {
-        const index = Number(input.dataset.member);
-        const visible = !hiddenRows.has(index);
-        input.checked = visible;
-        input.closest(".member-toggle").classList.toggle("active", visible);
-    });
-}
-
-unitToggleInputs.forEach(input => {
-    input.addEventListener("click", () => {
-        const href = UNIT_PAGES[input.dataset.unit];
-        if (href) window.location.href = href;
-    });
-});
-
-memberToggleInputs.forEach(input => {
-    input.addEventListener("change", () => {
-        setMemberHidden(Number(input.dataset.member), !input.checked);
-        saveHiddenState();
-        syncToggleCheckboxes();
-        createTable();
-        createLrGrid();
-    });
-});
-
+setupGroupSwitcher();
 createTable();
 createLrGrid();
 updateNavButtons();
 renderGuide(currentTab);
 renderLegend();
 updateDateDisplay();
-syncToggleCheckboxes();
 
 /* ==========================================
    탭 전환
@@ -498,10 +458,8 @@ function openModal(titleText) {
             <span class="option-label">${option.name}</span>
         `;
 
-        // 카드(동그라미) 클릭 -> 이 색을 셀에 적용
         item.addEventListener("click", () => applySelection(getOptionColor(option)));
 
-        // 연필 아이콘 클릭은 셀 적용과 별개로, 색상 피커만 열기
         const editBtn = item.querySelector(".color-edit-btn");
         const editInput = item.querySelector(".color-edit-input");
         editBtn.addEventListener("click", (e) => e.stopPropagation());
@@ -532,8 +490,6 @@ function openModal(titleText) {
     renderModalExtra(titleText);
 }
 
-/* 모달 하단(색상 기본값 되돌리기 + 행/열 숨기기 체크박스) 영역.
-   모달을 열 때마다 currentTarget 기준으로 다시 그린다. */
 function renderModalExtra(titleText) {
     let modalExtra = document.getElementById("modalExtra");
     if (!modalExtra) {
@@ -577,7 +533,6 @@ function renderModalExtra(titleText) {
             hiddenSet.delete(index);
         }
         saveHiddenState();
-        syncToggleCheckboxes();
         createTable();
         modal.classList.add("hidden");
     });
@@ -658,19 +613,15 @@ function defaultAvatar(name, color) {
 
 /* ==========================================
    공수 취향표 - 그리드 생성
-   (엔페스 표에서 완전히 숨긴 멤버 - 행/열 모두 숨김 - 는 공수 표에서도 제외한다)
 ========================================== */
 
 function createLrGrid() {
     lrGrid.innerHTML = "";
 
     members.forEach((member, index) => {
-        if (hiddenRows.has(index) && hiddenCols.has(index)) return;
-
         const row = document.createElement("div");
         row.className = "lr-row";
 
-        /* 아바타 */
         const avatar = document.createElement("div");
         avatar.className = "lr-avatar";
         avatar.dataset.index = index;
@@ -697,7 +648,6 @@ function createLrGrid() {
 
         row.appendChild(avatar);
 
-        /* 오른쪽 내용 (바 + 텍스트) */
         const content = document.createElement("div");
         content.className = "lr-content";
 
@@ -771,13 +721,9 @@ function createLrGrid() {
         lrGrid.appendChild(row);
     });
 
-    /* 저장돼 있던 글이 여러 줄이어도 처음부터 잘리지 않도록,
-       모든 칸을 한 번씩 실제 내용 높이에 맞춰준다. */
     lrGrid.querySelectorAll(".lr-text").forEach(autoResizeTextarea);
 }
 
-/* 칸에 적은 글이 늘어나면 잘리는 대신 칸 자체가 자연스럽게 늘어나도록.
-   grid 행이 auto 높이라 아래 칸들과 겹치지 않고 밀려 내려간다. */
 function autoResizeTextarea(el) {
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight}px`;
@@ -798,7 +744,6 @@ function saveLrData() {
     localStorage.setItem(LR_STORAGE_KEY, JSON.stringify(lrData));
 }
 
-/* 사진 업로드 */
 photoInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file || currentPhotoIndex === null) return;
@@ -834,9 +779,7 @@ resetBtn.addEventListener("click", () => {
         historyStack = [];
         redoStack = [];
         updateNavButtons();
-        syncToggleCheckboxes();
         createTable();
-        createLrGrid();
     } else {
         localStorage.removeItem(LR_STORAGE_KEY);
         lrData = { texts: {}, cells: {}, photos: {} };
@@ -857,52 +800,10 @@ saveBtn.addEventListener("click", async () => {
     tabWrap.style.display = "none";
     dateToggleWrap.style.display = "none";
 
-    /* 안내 문구, 이전/이후 버튼은 이미지에는 나오지 않도록 캡처 중에만 숨김 */
     area.classList.add("capturing");
 
-    /* 화면(특히 모바일)에 적용돼 있던 축소/반응형 스타일을 잠시 걷어내고,
-       항상 PC 버전과 동일한 레이아웃(탭별 고정 폭)으로 저장되도록 한다. */
     const prevTransform = area.style.transform;
     area.style.transform = "none";
-
-    /* 모바일에서는 .capture-area가 반응형(좁은 폭) CSS로 화면에 떠
-       있는 상태라, html2canvas의 windowWidth 옵션만으로는(특히 iOS
-       Safari에서) 항상 PC 레이아웃으로 안정적으로 재계산되지 않는다.
-       그래서 캡처 직전에 실제 DOM의 인라인 width를 탭별 기준 폭으로
-       강제로 넓혀서, 어떤 기기에서 저장하든 항상 동일한 폭/비율로
-       리플로우된 상태를 캡처하도록 한다. */
-    const prevAreaWidth = area.style.width;
-    let captureWidth = getCaptureWidth(currentTab);
-    area.style.width = `${captureWidth}px`;
-
-    /* 엔페스 표는 멤버 수가 많아 .table-scroll 안에서 가로 스크롤되는데,
-       캡처할 때는 스크롤 없이 표 전체가 다 보이도록 잠시 폭 제한을 풀어준다. */
-    let tableScrollEl = null;
-    let prevScrollOverflow = "";
-    let prevScrollMaxWidth = "";
-
-    if (currentTab === "rps") {
-        tableScrollEl = area.querySelector(".table-scroll");
-        if (tableScrollEl) {
-            prevScrollOverflow = tableScrollEl.style.overflow;
-            prevScrollMaxWidth = tableScrollEl.style.maxWidth;
-            tableScrollEl.style.overflow = "visible";
-            tableScrollEl.style.maxWidth = "none";
-
-            const neededWidth = tableScrollEl.scrollWidth + 100; // 좌우 padding 여유분
-            if (neededWidth > captureWidth) {
-                captureWidth = neededWidth;
-                area.style.width = `${captureWidth}px`;
-            }
-        }
-    }
-
-    /* 드래그해야 보이는 오른쪽 칸들이 저장된 이미지에서 잘리는 문제 방지:
-       위에서 스크롤 제한을 풀어 실제 필요한 폭까지 넓힌 뒤, 그 최종
-       scrollWidth/scrollHeight를 캡처 width/height로 명시해서 보이는
-       영역이 아니라 전체 내용이 항상 다 담기도록 한다. */
-    const finalCaptureWidth = Math.max(captureWidth, area.scrollWidth);
-    const finalCaptureHeight = area.scrollHeight;
 
     try {
         const canvas = await html2canvas(area, {
@@ -910,16 +811,8 @@ saveBtn.addEventListener("click", async () => {
             scale: 4,
             useCORS: true,
             logging: false,
-            width: finalCaptureWidth,
-            height: finalCaptureHeight,
-            windowWidth: finalCaptureWidth,
-            windowHeight: finalCaptureHeight,
-            /*
-             * html2canvas는 textarea 안의 줄바꿈/자동 줄바꿈을 제대로
-             * 그리지 못해서(한 줄로만 렌더링되며 잘려 보임), 캡처용으로
-             * 복제된 문서 안에서만 textarea를 똑같이 생긴 div로 바꿔치기한다.
-             * 실제 화면의 textarea(입력 가능 상태)는 건드리지 않는다.
-             */
+            windowWidth: DESKTOP_CAPTURE_WIDTH,
+            windowHeight: Math.max(area.scrollHeight, 1600),
             onclone: (clonedDoc) => {
                 clonedDoc.querySelectorAll(".lr-text").forEach((ta) => {
                     const div = clonedDoc.createElement("div");
@@ -933,14 +826,6 @@ saveBtn.addEventListener("click", async () => {
             }
         });
 
-        /*
-         * data: URL 대신 Blob URL을 사용한다.
-         * 표가 커지고 고화질(scale 4)로 캡처하면서 이미지 용량이 커졌는데,
-         * 아이폰 사파리는 큰 data: URL을 <a download>로 다운로드할 때
-         * "다운로드하시겠습니까?" 확인창까지만 뜨고 실제 저장은 안 되는
-         * 경우가 있다. Blob URL은 이런 용량 제한 없이 정상적인
-         * 다운로드(하단 진행 표시 → 다운로드 항목 저장)로 이어진다.
-         */
         const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 
         if (!blob) {
@@ -959,7 +844,7 @@ saveBtn.addEventListener("click", async () => {
 
         const link = document.createElement("a");
         link.href = currentBlobUrl;
-        link.download = `NCT_${fileLabel}.png`;
+        link.download = `NPACE_${fileLabel}.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -969,13 +854,6 @@ saveBtn.addEventListener("click", async () => {
     } finally {
         area.classList.remove("capturing");
         area.style.transform = prevTransform;
-
-        if (tableScrollEl) {
-            tableScrollEl.style.overflow = prevScrollOverflow;
-            tableScrollEl.style.maxWidth = prevScrollMaxWidth;
-        }
-        area.style.width = prevAreaWidth;
-
         buttonWrap.style.display = "flex";
         tabWrap.style.display = "flex";
         dateToggleWrap.style.display = "flex";
@@ -1013,8 +891,6 @@ function fitCaptureArea() {
     );
 
     if (screenWidth <= MOBILE_BREAKPOINT) {
-        /* 모바일: 축소 대신 CSS 반응형 레이아웃을 그대로 사용하고,
-           세로로 길어진 내용은 화면을 드래그해서 내려보는 방식으로 확인한다. */
         area.style.transform = "none";
         area.style.transformOrigin = "";
         wrap.style.width = "";
@@ -1022,17 +898,12 @@ function fitCaptureArea() {
         return;
     }
 
-    const captureWidth = getCaptureWidth(currentTab);
-
-    /* 화면이 넓을 때 카드 양옆으로 빈 여백만 넓게 남지 않도록,
-       1배로만 축소하고 끝내는 게 아니라 화면 폭에 맞춰 살짝 확대(최대 1.2배)까지
-       허용해서 실제 창 가로 폭에 맞춰 표가 꽉 차 보이도록 한다. */
-    const scale = Math.min(1.2, screenWidth / captureWidth);
+    const scale = Math.min(1, screenWidth / DESKTOP_CAPTURE_WIDTH);
 
     area.style.transformOrigin = "top left";
     area.style.transform = `scale(${scale})`;
 
-    wrap.style.width = `${captureWidth * scale}px`;
+    wrap.style.width = `${DESKTOP_CAPTURE_WIDTH * scale}px`;
     wrap.style.height = `${area.scrollHeight * scale}px`;
 }
 
