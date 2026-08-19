@@ -157,6 +157,12 @@ h1 {
     margin-top: 0;
 }
 
+/* 모바일에서만 보이는 "옆으로 밀어서 보기" 안내 문구.
+   PC에서는 표 전체가 이미 한 화면에 들어오므로 숨겨둔다. */
+.scroll-hint {
+    display: none;
+}
+
 .table-nav {
     display: flex;
     justify-content: flex-end;
@@ -537,7 +543,8 @@ button:hover {
    h1의 margin-bottom(18px)만 남아 제목과 표 사이 간격이
    너무 좁거나 멀지 않게 유지된다. */
 .capturing .guide-list,
-.capturing .table-nav {
+.capturing .table-nav,
+.capturing .scroll-hint {
     display: none;
 }
 
@@ -816,30 +823,57 @@ button:hover {
         line-height: 1.5;
     }
 
-    /* 알페스 취향표 - 화면 폭에 맞춰 표 전체가 줄어들어
-       드래그 없이 한 화면에 다 보이도록 한다. */
+    /* 알페스 취향표 - 25명 표를 억지로 화면 폭에 맞춰 줄이면
+       글자가 겹쳐 보이므로, 표는 원래 크기를 유지하고
+       가로 스크롤(드래그)로 볼 수 있게 한다. */
     .table-wrap {
-        overflow-x: visible;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -14px;
+        padding: 0 14px 6px;
     }
 
     table {
-        width: 100%;
-        min-width: 0;
+        width: max-content;
+        min-width: 100%;
         table-layout: fixed;
-        --header-row-height: 30px;
-        --header-col-width: 13%;
+        --header-row-height: 34px;
+        --header-col-width: 64px;
+    }
+
+    th,
+    td {
+        width: 50px;
+        min-width: 50px;
+    }
+
+    th:first-child,
+    td:first-child {
+        width: var(--header-col-width);
+        min-width: var(--header-col-width);
     }
 
     th {
-        font-size: 8px;
-        padding: 0 1px;
+        font-size: 11px;
+        padding: 0 2px;
         word-break: keep-all;
     }
 
     td {
-        height: 28px;
-        font-size: 8px;
-        padding: 0 1px;
+        height: 40px;
+        font-size: 11px;
+        padding: 0 2px;
+    }
+
+    /* 표가 화면보다 넓어졌다는 걸 알려주는 안내 문구 */
+    .scroll-hint {
+        display: block;
+        text-align: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: #aaa;
+        margin: -4px 0 10px;
     }
 
     .table-nav {

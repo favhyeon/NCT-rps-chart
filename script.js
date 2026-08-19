@@ -857,6 +857,69 @@ resetBtn.addEventListener("click", () => {
    이미지 저장
 ========================================== */
 
+/*
+ * 모바일 브라우저(특히 iOS Safari)는 캔버스 한 장이 가질 수 있는
+ * 총 픽셀 수에 제한이 있다(기기/OS 버전마다 다르지만 대략 1,600만 픽셀
+ * 안팎). 표 캡처 폭(2400~2500px)에 배율 4를 그대로 곱하면
+ * 가로 9,600~10,000px x 세로 수천px, 즉 6~7천만 픽셀짜리 캔버스가
+ * 만들어져 이 한도를 훌쩍 넘어버린다. 이 경우 캡처가 중간에 실패하거나,
+ * 성공해도 빈 이미지/잘린 이미지가 나오는데, 기기 성능이나 그 순간의
+ * 남은 메모리에 따라 되기도 하고 안 되기도 해서 "가끔" 실패하는
+ * 것처럼 보인다. 데스크톱 브라우저는 이 한도가 훨씬 넉넉해 배율 4를
+ * 그대로 써도 안전하다.
+ */
+function getSafeCaptureScale(area) {
+    const DESKTOP_SCALE = 4;
+    const MOBILE_SAFE_PIXELS = 15000000; // 여유를 둔 안전 픽셀 상한
+
+    const isMobile = Math.min(
+        window.innerWidth,
+        document.documentElement.clientWidth
+    ) <= MOBILE_BREAKPOINT;
+
+    if (!isMobile) return DESKTOP_SCALE;
+
+    const captureWidth = getCaptureWidth(currentTab);
+    const captureHeight = Math.max(area.scrollHeight, 1600);
+    const maxScale = Math.sqrt(MOBILE_SAFE_PIXELS / (captureWidth * captureHeight));
+
+    return Math.max(1.5, Math.min(DESKTOP_SCALE, maxScale));
+}
+
+async function captureArea(area, scale) {
+    const canvas = await html2canvas(area, {
+        backgroundColor: "#ffffff",
+        scale,
+        useCORS: true,
+        logging: false,
+        windowWidth: getCaptureWidth(currentTab),
+        windowHeight: Math.max(area.scrollHeight, 1600),
+        /*
+         * html2canvas는 textarea 안의 줄바꿈/자동 줄바꿈을 제대로
+         * 그리지 못해서(한 줄로만 렌더링되며 잘려 보임), 캡처용으로
+         * 복제된 문서 안에서만 textarea를 똑같이 생긴 div로 바꿔치기한다.
+         * 실제 화면의 textarea(입력 가능 상태)는 건드리지 않는다.
+         */
+        onclone: (clonedDoc) => {
+            clonedDoc.querySelectorAll(".lr-text").forEach((ta) => {
+                const div = clonedDoc.createElement("div");
+                div.className = "lr-text";
+                div.style.whiteSpace = "pre-wrap";
+                div.style.wordBreak = "break-word";
+                div.style.overflow = "hidden";
+                div.textContent = ta.value;
+                ta.replaceWith(div);
+            });
+        }
+    });
+
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+    if (!blob) {
+        throw new Error("이미지 변환에 실패했습니다.");
+    }
+    return blob;
+}
+
 saveBtn.addEventListener("click", async () => {
     const buttonWrap = document.querySelector(".button-wrap");
     const tabWrap = document.querySelector(".tab-wrap");
@@ -874,47 +937,29 @@ saveBtn.addEventListener("click", async () => {
     const prevTransform = area.style.transform;
     area.style.transform = "none";
 
+    const primaryScale = getSafeCaptureScale(area);
+
     try {
-        const canvas = await html2canvas(area, {
-            backgroundColor: "#ffffff",
-            scale: 4,
-            useCORS: true,
-            logging: false,
-            windowWidth: getCaptureWidth(currentTab),
-            windowHeight: Math.max(area.scrollHeight, 1600),
-            /*
-             * html2canvas는 textarea 안의 줄바꿈/자동 줄바꿈을 제대로
-             * 그리지 못해서(한 줄로만 렌더링되며 잘려 보임), 캡처용으로
-             * 복제된 문서 안에서만 textarea를 똑같이 생긴 div로 바꿔치기한다.
-             * 실제 화면의 textarea(입력 가능 상태)는 건드리지 않는다.
-             */
-            onclone: (clonedDoc) => {
-                clonedDoc.querySelectorAll(".lr-text").forEach((ta) => {
-                    const div = clonedDoc.createElement("div");
-                    div.className = "lr-text";
-                    div.style.whiteSpace = "pre-wrap";
-                    div.style.wordBreak = "break-word";
-                    div.style.overflow = "hidden";
-                    div.textContent = ta.value;
-                    ta.replaceWith(div);
-                });
-            }
-        });
+        let blob;
+
+        try {
+            blob = await captureArea(area, primaryScale);
+        } catch (firstError) {
+            /* 첫 시도가 실패하면(메모리 부족 등) 배율을 한 번 더 낮춰
+               재시도한다. 화질은 조금 떨어지지만 저장 자체가 안 되는
+               것보다는 낫다. */
+            console.warn("1차 캡처 실패, 낮은 배율로 재시도", firstError);
+            blob = await captureArea(area, Math.max(1, primaryScale * 0.6));
+        }
 
         /*
          * data: URL 대신 Blob URL을 사용한다.
-         * 표가 커지고 고화질(scale 4)로 캡처하면서 이미지 용량이 커졌는데,
+         * 표가 커지고 고화질로 캡처하면서 이미지 용량이 커졌는데,
          * 아이폰 사파리는 큰 data: URL을 <a download>로 다운로드할 때
          * "다운로드하시겠습니까?" 확인창까지만 뜨고 실제 저장은 안 되는
          * 경우가 있다. Blob URL은 이런 용량 제한 없이 정상적인
          * 다운로드(하단 진행 표시 → 다운로드 항목 저장)로 이어진다.
          */
-        const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-
-        if (!blob) {
-            throw new Error("이미지 변환에 실패했습니다.");
-        }
-
         if (currentBlobUrl) {
             URL.revokeObjectURL(currentBlobUrl);
         }
@@ -933,7 +978,7 @@ saveBtn.addEventListener("click", async () => {
         document.body.removeChild(link);
     } catch (error) {
         console.error(error);
-        alert("이미지 저장 중 문제가 발생했습니다.");
+        alert("이미지 저장에 실패했어요. 다른 앱을 종료해 메모리를 확보하거나, 잠시 후 다시 시도해 주세요.");
     } finally {
         area.classList.remove("capturing");
         area.style.transform = prevTransform;
