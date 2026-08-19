@@ -1,577 +1,323 @@
+/* ===========================
+   기본 설정
+=========================== */
+
 :root {
-    --ink: #17151f;
-    --ink-soft: #726f80;
-    --line: #e7e1f5;
-    --bg: #f8f6fc;
-    --card: #ffffff;
-    --accent: #7b5cff;
-    --accent-2: #b478ff;
-    --accent-deep: #5a3fd6;
-    --accent-soft: #f1ecff;
-    --accent-soft-2: #e9e0ff;
-    --radius: 14px;
+    --c-1: #000000;
+    --c-2: #000000;
+    --c-3: #000000;
+    --c-4: #000000;
+    --c-accent: #000000;
+    --c-accent-dark: #000000;
+    --c-tint: #f0f0f0;
+    --c-gradient: #000000;
+    --c-gradient-hover: #222222;
+    --header-row-height: 56px;
+    --header-col-width: 100px;
 }
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: "Pretendard", "Noto Sans KR", -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    -webkit-font-smoothing: antialiased;
+    background: #ffffff;
+    font-family:
+        "Pretendard",
+        "Noto Sans KR",
+        sans-serif;
+    color: #222;
 }
 
-.hidden {
-    display: none !important;
+.wrapper {
+    width: 100%;
+    min-height: 100vh;
+    padding: 32px 0 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: visible;
 }
 
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-}
-
-.page {
-    max-width: 1100px;
+.scale-wrap {
     margin: 0 auto;
-    padding: 36px 16px 64px;
+    overflow: hidden;
+    position: relative;
 }
 
-/* ===================== 탭 (그라데이션 필) ===================== */
+.capture-area {
+    width: 2400px;
+    margin: 0 auto;
+    padding: 28px 50px 34px;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .08);
+    transform-origin: top left;
+}
+
+/* 알페스 취향표: 로고 위쪽 여백을 넉넉하게 준다 */
+#captureArea {
+    padding-top: 44px;
+}
+
+/* 공수 취향표: 위쪽 여백이 알페스 취향표보다 부족해 보여서 살짝 늘려준다 */
+#captureAreaLr {
+    padding-top: 38px;
+}
+
+/* 공수 취향표: 5열(5-5-5-5-5) 배치라 알페스 취향표보다도 더 넓게 잡는다.
+   JS의 CAPTURE_WIDTH.lr 값과 항상 같아야 한다.
+   모바일(반응형 100% 폭)에서는 적용하지 않는다. */
+@media (min-width: 769px) {
+    #captureAreaLr {
+        width: 2500px;
+    }
+}
+
+/* ===========================
+   탭 전환
+=========================== */
 
 .tab-wrap {
     display: flex;
-    justify-content: center;
-    gap: 4px;
-    margin: 0 auto 28px;
-    width: fit-content;
-    padding: 5px;
+    gap: 8px;
+    background: var(--c-tint);
+    padding: 6px;
     border-radius: 999px;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    box-shadow: 0 8px 20px -10px rgba(123, 92, 255, 0.55);
+    margin-bottom: 18px;
 }
 
 .tab-btn {
     border: none;
     background: transparent;
-    color: #ffffff;
-    padding: 9px 24px;
+    padding: 10px 22px;
     border-radius: 999px;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--c-accent);
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: .2s;
+}
+
+.tab-btn:hover {
+    color: var(--c-accent-dark);
 }
 
 .tab-btn.active {
-    background: #ffffff;
-    color: var(--accent-deep);
+    background: var(--c-gradient);
+    color: #ffffff;
 }
 
-/* ===================== 로고 ===================== */
+/* ===========================
+   상단
+=========================== */
 
-.logo-wrap {
-    display: flex;
-    justify-content: center;
-    margin: 4px 0 18px;
-}
-
-.brand-logo {
-    height: 46px;
-    width: auto;
+.logo {
     display: block;
+    width: 300px;
+    height: auto;
+    margin: 0 auto 26px;
 }
 
-.brand-logo-fallback {
-    font-family: "Pretendard", sans-serif;
-    font-size: 30px;
+h1 {
+    text-align: center;
+    font-size: 34px;
+    line-height: 1.15;
     font-weight: 900;
-    letter-spacing: 0.08em;
-    color: var(--ink);
+    color: var(--c-accent);
+    margin: 0 0 34px;
 }
 
-/* ===================== 헤더 ===================== */
-
-.page-header {
+.capture-id-bottom {
+    display: block;
     text-align: center;
-    margin-bottom: 18px;
-}
-
-.page-header h1 {
-    font-size: 27px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin: 0;
-    color: var(--accent-deep);
-}
-
-.date-ver {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ink-soft);
-    margin-left: 8px;
-}
-
-.page-sub {
-    margin: 7px 0 0;
-    font-size: 13px;
-    color: var(--ink-soft);
-    letter-spacing: 0.02em;
-}
-
-/* ===================== 안내 문구 ===================== */
-
-.guide-box {
-    text-align: center;
-    margin: 0 auto 22px;
-    max-width: 560px;
-}
-
-.guide-box p {
-    margin: 2px 0;
-    font-size: 12.5px;
-    color: var(--ink-soft);
-    line-height: 1.6;
-}
-
-/* ===================== 캡처 영역 공통 ===================== */
-
-.scale-wrap {
-    width: 100%;
-    overflow-x: auto;
-}
-
-.capture-area {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 28px;
-    width: 1100px;
-    max-width: none;
-    margin: 0 auto;
-    box-shadow: 0 1px 0 var(--line);
-}
-
-.capture-area.capturing .avatar-edit {
-    display: none;
-}
-
-.capture-title {
-    text-align: center;
-    margin-bottom: 18px;
-}
-
-.capture-title h2 {
-    margin: 0;
-    font-size: 19px;
-    font-weight: 800;
-    color: var(--accent-deep);
-}
-
-/* ===================== 표 ===================== */
-
-.table-wrap {
-    overflow-x: auto;
-}
-
-table#chartTable {
-    border-collapse: collapse;
-    width: 100%;
-    table-layout: fixed;
-}
-
-#chartTable th,
-#chartTable td {
-    border: 1px solid var(--line);
-    text-align: center;
-    font-size: 12px;
-    padding: 0;
-    height: 34px;
-    width: 34px;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-#chartTable th.corner {
-    background: var(--accent-deep);
-}
-
-/* 멤버 이름이 적힌 행/열 헤더: 배경은 그라데이션 포인트 컬러, 이름 글자는 검정으로 고정 */
-#chartTable th {
-    background: linear-gradient(135deg, var(--accent-soft) 0%, var(--accent-soft-2) 100%);
-    font-weight: 800;
-    color: #000000;
-}
-
-#chartTable th.clickable-header {
-    cursor: pointer;
-}
-
-#chartTable th.clickable-header:hover {
-    background: var(--accent-soft-2);
-}
-
-/* 커플명(칩명)이 들어가는 칸 - 기존 색상 유지, 이름 헤더와 별개 */
-#chartTable td {
-    cursor: pointer;
-    color: var(--ink);
-    transition: filter 0.1s ease;
-}
-
-#chartTable td:hover {
-    filter: brightness(0.96);
-}
-
-#chartTable td.diagonal {
-    background: #faf8fe;
-    color: #a79fc2;
+    margin: 26px 0 0;
+    color: #bbb;
+    font-size: 14px;
     font-weight: 600;
 }
 
-/* ===================== 범례 ===================== */
+.chart-date {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--c-accent);
+    vertical-align: middle;
+}
+
+/* ===========================
+   표
+=========================== */
+
+.table-wrap {
+    position: relative;
+    margin-top: 0;
+}
+
+.table-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    max-width: 2300px;
+    margin: 0 auto 8px;
+}
+
+.nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--c-tint);
+    color: var(--c-accent);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: .15s;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: #dfe3f5;
+    transform: none;
+}
+
+.nav-btn:disabled {
+    opacity: .35;
+    cursor: default;
+}
+
+table {
+    width: 100%;
+    max-width: 2300px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    table-layout: fixed;
+    overflow: hidden;
+    border-radius: 16px;
+
+    /* 표 전체에 검정 배경을 깔아두고, th는 배경을 투명하게 둬서
+       그 아래 배경이 비쳐 보이게 한다.
+       - 첫 번째(위쪽 레이어): 맨 윗줄(헤더 행) 전체를 가로지르는 배경
+       - 두 번째(아래쪽 레이어): 맨 왼쪽 칸(헤더 열) 전체를 가로지르는 배경
+       모서리(첫 행 첫 칸)는 두 레이어가 겹치는데, 위쪽 레이어(가로)가 우선 표시된다. */
+    background-image:
+        linear-gradient(90deg, var(--c-1), var(--c-2), var(--c-3), var(--c-4)),
+        linear-gradient(180deg, var(--c-1), var(--c-2), var(--c-3), var(--c-4));
+    background-repeat: no-repeat, no-repeat;
+    background-position: top left, top left;
+    background-size: 100% var(--header-row-height), var(--header-col-width) 100%;
+}
+
+th {
+    background: transparent;
+    color: #ffffff;
+    height: var(--header-row-height);
+    font-size: 15px;
+    font-weight: 800;
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 0 2px;
+    word-break: keep-all;
+}
+
+th:first-child {
+    width: var(--header-col-width);
+}
+
+.clickable-header {
+    cursor: pointer;
+    transition: .15s;
+}
+
+.clickable-header:hover {
+    background: var(--c-gradient-hover);
+}
+
+td {
+    height: 52px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    background: #fff;
+    border: 1px solid #e3e3e3;
+    cursor: pointer;
+    transition: .15s;
+}
+
+td:hover {
+    transform: scale(1.025);
+    position: relative;
+    z-index: 2;
+}
+
+/* ===========================
+   범례
+=========================== */
 
 .legend {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 12px 18px;
-    margin-top: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 25px;
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 12.5px;
-    color: var(--ink-soft);
-}
-
-.legend-item .color {
-    width: 13px;
-    height: 13px;
-    border-radius: 4px;
-    border: 1px solid var(--line);
-    display: inline-block;
-}
-
-.legend-item .color.dashed {
-    border-style: dashed;
-}
-
-/* ===================== 토글 행 ===================== */
-
-.toggle-row {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 22px 0 10px;
-}
-
-.switch-toggle {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: var(--ink-soft);
-    cursor: pointer;
-    user-select: none;
-}
-
-.switch-toggle input {
-    accent-color: var(--accent);
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
-}
-
-/* ===================== 유닛 전환 ===================== */
-
-.group-switch {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    margin: 6px auto 18px;
-    padding: 14px 16px;
-    border: 1px dashed var(--accent-soft-2);
-    border-radius: var(--radius);
-    max-width: 520px;
-}
-
-.group-switch-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--ink-soft);
-    letter-spacing: 0.04em;
-}
-
-.group-switch-options {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.group-chip {
-    position: relative;
-}
-
-.group-chip input {
-    position: absolute;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    cursor: pointer;
-}
-
-.group-chip span {
-    display: inline-block;
-    padding: 7px 16px;
-    border: 1px solid var(--accent);
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--accent-deep);
-    background: var(--card);
-    transition: background 0.15s ease, color 0.15s ease;
-}
-
-.group-chip input:checked + span {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    color: #ffffff;
-    border-color: transparent;
-}
-
-/* ===================== 버튼 영역 ===================== */
-
-.button-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 22px;
-}
-
-.icon-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    border: 1px solid var(--line);
-    background: var(--card);
-    font-size: 16px;
-    cursor: pointer;
-    color: var(--ink);
-}
-
-.icon-btn:disabled {
-    opacity: 0.3;
-    cursor: default;
-}
-
-.ghost-btn,
-.primary-btn {
-    padding: 10px 20px;
-    border-radius: 999px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    border: 1px solid var(--accent);
-}
-
-.ghost-btn {
-    background: var(--card);
-    color: var(--accent-deep);
-}
-
-.primary-btn {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    color: #ffffff;
-    border-color: transparent;
-}
-
-/* ===================== 모달: 색상 선택 ===================== */
-
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(23, 21, 31, 0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 50;
-}
-
-.modal-content {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 22px;
-    width: 100%;
-    max-width: 360px;
-    max-height: 86vh;
-    overflow-y: auto;
-}
-
-.modal-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-}
-
-.modal-head h3 {
-    margin: 0;
-    font-size: 17px;
-    font-weight: 800;
-    color: var(--accent-deep);
-}
-
-.modal-close {
-    border: none;
-    background: none;
+    gap: 9px;
     font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-    color: var(--ink-soft);
+    font-weight: 700;
 }
 
-.option-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px 10px;
-}
-
-.option-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-}
-
-.option-dot-wrap {
-    position: relative;
-}
-
-.option-dot {
-    display: block;
-    width: 40px;
-    height: 40px;
+.color {
+    width: 27px;
+    height: 27px;
     border-radius: 50%;
-    border: 1px solid var(--line);
+    border: 2px solid #d8d8d8;
 }
 
-.option-dot.dashed {
+.color.dashed {
     border-style: dashed;
-    border-color: #bbbbbb;
+    border-color: #bbb;
+    background: #fff !important;
 }
 
-.color-edit-btn {
-    position: absolute;
-    right: -4px;
-    bottom: -4px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--accent-deep);
-    color: #ffffff;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.color-edit-input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-}
-
-.option-label {
-    font-size: 12px;
-    color: var(--ink);
-    text-align: center;
-}
-
-.clear-card .option-dot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f1f1f1;
-    font-size: 15px;
-}
-
-.modal-extra {
-    margin-top: 18px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.reset-colors-link {
-    font-size: 12.5px;
-    color: var(--ink-soft);
-    text-decoration: underline;
-    cursor: pointer;
-    text-align: center;
-}
-
-.hide-toggle {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    justify-content: center;
-    cursor: pointer;
-}
-
-/* ===================== 모달: 저장 완료 ===================== */
-
-.save-modal-content {
-    max-width: 480px;
-    text-align: center;
-}
-
-.save-modal-content img {
-    width: 100%;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-    margin-top: 8px;
-}
-
-/* ===================== 공수(L-R) 취향표 ===================== */
+/* ===========================
+   왼른 취향표
+=========================== */
 
 .lr-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+    /* 25명, 왼쪽부터 5-5-5-5-5로 배치하기 위해 5열 x 5행, 세로(위→아래)
+       우선으로 채운다. 그러면 1열=1~5번, 2열=6~10번 ... 순서로 채워진다. */
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, auto);
+    grid-auto-flow: column;
+    gap: 30px 22px;
 }
 
 .lr-row {
     display: flex;
-    gap: 14px;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 }
 
 .lr-avatar {
     position: relative;
-    width: 64px;
-    height: 64px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     overflow: hidden;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     cursor: pointer;
-    background: #eeeeee;
+    border: 4px solid var(--c-tint);
+    background: var(--c-tint);
 }
 
 .lr-avatar img {
@@ -581,19 +327,18 @@ table#chartTable {
     display: block;
 }
 
-.avatar-edit {
+.lr-avatar .avatar-edit {
     position: absolute;
-    inset: 0;
+    inset: auto 0 0 0;
+    height: 20px;
+    background: rgba(0,0,0,.6);
+    color: #fff;
+    font-size: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.55);
-    color: #ffffff;
-    font-size: 9px;
     opacity: 0;
-    transition: opacity 0.15s ease;
-    text-align: center;
-    padding: 4px;
+    transition: .15s;
 }
 
 .lr-avatar:hover .avatar-edit {
@@ -601,45 +346,52 @@ table#chartTable {
 }
 
 .lr-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    width: 100%;
 }
 
 .lr-bar-wrap {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    margin-bottom: 10px;
 }
 
 .lr-label-l,
 .lr-label-r {
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 800;
-    color: var(--ink-soft);
-    width: 12px;
-    text-align: center;
-    flex-shrink: 0;
+    color: var(--c-accent);
+    flex: 0 0 auto;
 }
 
 .lr-bar {
     flex: 1;
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 2px;
+    display: flex;
+    height: 30px;
+    border: 2px solid #dcdcdc;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .lr-cell {
-    height: 18px;
-    background: var(--accent-soft);
-    border: 1px solid var(--line);
+    flex: 1;
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #e8e8e8;
     cursor: pointer;
+    transition: .1s;
+}
+
+.lr-cell:last-child {
+    border-right: none;
+}
+
+.lr-cell:hover {
+    background: #f2f2f2;
 }
 
 .lr-cell.filled {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    border-color: var(--accent);
+    background: var(--c-3);
 }
 
 .lr-text-wrap {
@@ -648,59 +400,595 @@ table#chartTable {
 
 .lr-text {
     width: 100%;
+    min-height: 150px;
     resize: none;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-family: inherit;
-    font-size: 12.5px;
-    color: var(--ink);
-    min-height: 40px;
     overflow: hidden;
+    border: 2px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 10px 12px 22px;
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: inherit;
+    word-break: break-word;
+    color: #222;
+    outline: none;
+}
+
+.lr-text:focus {
+    border-color: var(--c-accent);
+}
+
+.lr-text::placeholder {
+    color: #999;
 }
 
 .lr-char-count {
     position: absolute;
-    right: 8px;
+    right: 10px;
     bottom: 6px;
-    font-size: 10px;
-    color: #aaaaaa;
+    font-size: 11px;
+    color: #999;
+    font-weight: 600;
+    pointer-events: none;
 }
 
-/* ===================== 반응형 ===================== */
+/* ===========================
+   버튼 / 안내
+=========================== */
+
+.button-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 22px;
+}
+
+button {
+    border: none;
+    border-radius: 14px;
+    font-size: 21px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+#saveBtn,
+#resetBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: auto;
+    height: 48px;
+    padding: 0 26px;
+    border-radius: 999px;
+    font-size: 16px;
+}
+
+#saveBtn {
+    background: var(--c-gradient);
+    color: #ffffff;
+}
+
+#saveBtn:hover {
+    background: var(--c-gradient-hover);
+}
+
+#resetBtn {
+    background: #fff;
+    color: #666;
+    border: 1.5px solid #ddd;
+}
+
+#resetBtn:hover {
+    background: #f5f5f5;
+}
+
+.btn-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.date-toggle-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    margin-top: 20px;
+}
+
+.date-toggle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #777;
+    cursor: pointer;
+    user-select: none;
+}
+
+.date-toggle input {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--c-accent);
+    cursor: pointer;
+}
+
+.guide-list {
+    text-align: center;
+    margin: 0 0 18px;
+}
+
+.guide-list p {
+    margin: 0;
+    color: #999;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.7;
+}
+
+/* 이미지 저장(캡처) 시 안내 문구 / 이전-이후 버튼을 숨기는 상태.
+   h1의 margin-bottom(18px)만 남아 제목과 표 사이 간격이
+   너무 좁거나 멀지 않게 유지된다. */
+.capturing .guide-list,
+.capturing .table-nav {
+    display: none;
+}
+
+/* ===========================
+   색상 선택 모달
+=========================== */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal-box {
+    width: 440px;
+    background: #fff;
+    border-radius: 24px;
+    padding: 34px 26px 26px;
+    position: relative;
+    box-shadow: 0 18px 50px rgba(0,0,0,.18);
+}
+
+.close-btn {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background: none !important;
+    border: none;
+    font-size: 34px;
+    cursor: pointer;
+    color: #555;
+}
+
+.modal-title {
+    text-align: center;
+    font-size: 21px;
+    font-weight: 900;
+    color: #111;
+    margin-bottom: 22px;
+}
+
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px 10px;
+}
+
+.option-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 2px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: .15s;
+}
+
+.option-card:hover {
+    background: #f4f4f4;
+}
+
+.option-dot {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 2px solid #e2e2e2;
+}
+
+.option-dot.dashed {
+    border-style: dashed;
+    border-color: #bbb;
+    background: #fff !important;
+}
+
+.option-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+}
+
+.option-dot-wrap {
+    display: inline-block;
+    position: relative;
+    width: 46px;
+    height: 46px;
+}
+
+.option-dot-wrap .option-dot {
+    width: 100%;
+    height: 100%;
+}
+
+.color-edit-btn {
+    position: absolute;
+    right: -6px;
+    bottom: -4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.color-edit-btn:hover {
+    background: #f4f4f4;
+}
+
+.color-edit-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+
+.reset-colors-link {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #999;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.reset-colors-link:hover {
+    color: var(--c-accent);
+}
+
+.modal-extra {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.hide-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #666;
+    cursor: pointer;
+    user-select: none;
+}
+
+.hide-toggle input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--c-accent);
+    cursor: pointer;
+}
+
+.clear-card .option-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f3f3 !important;
+    border: 2px solid #e2e2e2;
+    font-size: 20px;
+}
+
+/* ===========================
+   저장 완료 모달
+=========================== */
+
+.save-box {
+    width: 620px;
+    max-height: 92vh;
+    overflow: auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 18px 50px rgba(0,0,0,.18);
+}
+
+.save-box h2 {
+    font-size: 32px;
+    line-height: 1.25;
+    word-break: keep-all;
+}
+
+.save-box p {
+    font-size: 18px;
+    color: #777;
+    margin: 8px 0 20px;
+}
+
+#previewImage {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin: 18px auto 20px;
+    border-radius: 12px;
+}
+
+#closeSaveModal {
+    width: 180px;
+    background: #111;
+    color: #fff;
+}
+
+/* ===========================
+   반응형
+=========================== */
 
 @media (max-width: 768px) {
-    .page {
-        padding: 20px 10px 48px;
+    .wrapper {
+        padding: 16px 12px 24px;
+    }
+
+    /* 모바일에서는 JS 축소(transform: scale) 대신
+       실제 레이아웃 폭을 화면에 맞춰 다시 짜기 때문에
+       scale-wrap / capture-area 모두 폭을 100%로 풀어준다. */
+    .scale-wrap {
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible;
     }
 
     .capture-area {
         width: 100%;
-        padding: 16px;
+        padding: 20px 14px 22px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
     }
 
-    #chartTable th,
-    #chartTable td {
-        font-size: 10px;
-        height: 26px;
+    .logo {
+        width: 130px;
+        margin: 0 auto 14px;
+    }
+
+    h1 {
+        font-size: 19px;
+        margin: 0 0 14px;
+    }
+
+    .chart-date {
+        font-size: 11px;
+        margin-left: 6px;
+    }
+
+    .guide-list {
+        margin-bottom: 12px;
+    }
+
+    .guide-list p {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    /* 알페스 취향표 - 화면 폭에 맞춰 표 전체가 줄어들어
+       드래그 없이 한 화면에 다 보이도록 한다. */
+    .table-wrap {
+        overflow-x: visible;
+    }
+
+    table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+        --header-row-height: 30px;
+        --header-col-width: 13%;
+    }
+
+    th {
+        font-size: 8px;
+        padding: 0 1px;
+        word-break: keep-all;
+    }
+
+    td {
+        height: 28px;
+        font-size: 8px;
+        padding: 0 1px;
+    }
+
+    .table-nav {
+        margin-bottom: 6px;
+    }
+
+    .nav-btn {
         width: 26px;
+        height: 26px;
+        font-size: 11px;
     }
 
-    .group-switch-options {
-        gap: 6px;
+    .legend {
+        gap: 10px 14px;
+        margin-top: 16px;
     }
 
-    .group-chip span {
-        padding: 6px 12px;
+    .legend-item {
+        font-size: 11px;
+        gap: 5px;
+    }
+
+    .color {
+        width: 14px;
+        height: 14px;
+        border-width: 1.5px;
+    }
+
+    .capture-id-bottom {
+        font-size: 11px;
+        margin-top: 14px;
+    }
+
+    .tab-wrap {
+        margin-bottom: 14px;
+    }
+
+    .tab-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    .button-wrap {
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    #saveBtn,
+    #resetBtn {
+        height: 42px;
+        padding: 0 18px;
+        font-size: 14px;
+    }
+
+    .date-toggle {
         font-size: 12px;
     }
 
+    .save-box {
+        width: 75%;
+        max-width: 340px;
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .save-box h2 {
+        font-size: 27px;
+    }
+
+    .save-box p {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .modal-box {
+        width: 75%;
+        max-width: 340px;
+        padding: 26px 18px 18px;
+        border-radius: 18px;
+    }
+
+    .modal-title {
+        font-size: 17px;
+        margin-bottom: 16px;
+    }
+
+    .option-grid {
+        gap: 14px 6px;
+    }
+
+    .option-dot {
+        width: 38px;
+        height: 38px;
+    }
+
+    .option-dot-wrap {
+        width: 38px;
+        height: 38px;
+    }
+
+    .color-edit-btn {
+        width: 17px;
+        height: 17px;
+        font-size: 9px;
+    }
+
+    .option-label {
+        font-size: 11px;
+    }
+
+    .lr-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: none;
+        grid-auto-flow: row;
+        gap: 20px 14px;
+    }
+
     .lr-row {
-        gap: 10px;
+        gap: 8px;
     }
 
     .lr-avatar {
-        width: 52px;
-        height: 52px;
+        width: 74px;
+        height: 74px;
+        border-width: 3px;
+    }
+
+    .lr-bar-wrap {
+        gap: 5px;
+        margin-bottom: 8px;
+    }
+
+    .lr-label-l,
+    .lr-label-r {
+        font-size: 11px;
+    }
+
+    .lr-bar {
+        height: 22px;
+        border-radius: 6px;
+    }
+
+    .lr-text {
+        min-height: 90px;
+        font-size: 12px;
+        padding: 8px 10px 20px;
+    }
+
+    .lr-char-count {
+        font-size: 10px;
     }
 }

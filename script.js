@@ -1,62 +1,106 @@
 /* ==========================================
-   엔페스 통합 취향표 (NCT ALL - 127+WayV+DREAM+WISH, 25명)
+   엔페스 취향표 (NCT127 + NCT DREAM + NCT WayV + NCT WISH)
 ========================================== */
 
-/* 표(행/열 헤더)에 표시할 멤버 이름 */
-const members = ["쟈니", "태용", "유타", "쿤", "도영", "텐", "재현", "윈윈", "정우", "마크", "샤오쥔", "헨드리", "런쥔", "제노", "해찬", "재민", "양양", "천러", "지성", "시온", "리쿠", "유우시", "재희", "료", "사쿠야"];
+/* 표(행/열 헤더)에 표시할 멤버 이름 (127 9명 + 드림 9명 + 웨이션브이 7명 처럼 보이지만
+   실제로는 지정해주신 25명 순서 그대로) */
+const members = [
+    "쟈니",
+    "태용",
+    "유타",
+    "쿤",
+    "도영",
+    "텐",
+    "재현",
+    "윈윈",
+    "정우",
+    "마크",
+    "샤오쥔",
+    "헨드리",
+    "런쥔",
+    "제노",
+    "해찬",
+    "재민",
+    "양양",
+    "천러",
+    "지성",
+    "시온",
+    "리쿠",
+    "유우시",
+    "재희",
+    "료",
+    "사쿠야"
+];
 
-/* 각 멤버가 속한 유닛 (그룹 전환 링크에는 안 쓰이지만, 참고용으로 남겨둠) */
-const memberUnits = ["127", "127", "127", "WayV", "127", "WayV", "127", "WayV", "127", "127", "WayV", "WayV", "DREAM", "DREAM", "127", "DREAM", "WayV", "DREAM", "DREAM", "WISH", "WISH", "WISH", "WISH", "WISH", "WISH"];
+/* 멤버별 본인 이니셜 (닉네임, 행/열 숨기기 문구 · 기본 커플명 조합에 사용)
+   재현/재민/재희, 유타/유우시처럼 앞글자가 겹치는 멤버는 겹치지 않는 글자로 대신 지정했어요.
+   원하는 대로 자유롭게 바꿔서 쓰시면 됩니다. */
+const ownInitials = [
+    "쟌", "툥", "윹", "쿤", "도", "텐", "재", "윈", "정",
+    "맠", "샤", "헨", "런", "젠", "동", "잼", "양", "천",
+    "성", "숀", "맄", "윳", "댕", "료", "샄"
+];
 
-/* 멤버별 본인 이니셜 (닉네임, 행/열 숨기기 문구에 사용) */
-const ownInitials = ["쟌", "툥", "윹", "쿤", "도", "텐", "재", "윈", "정", "맠", "샤", "헨", "런", "젠", "동", "잼", "양", "천", "지", "숀", "쿨", "윳", "댕", "료", "샄"];
+/* 멤버별 기본 아바타 색상 (사진 로드 실패 시 대체용) - 기본 색은 검정으로 통일 */
+const memberColors = [
+    "#000000", "#000000", "#000000", "#000000", "#000000",
+    "#000000", "#000000", "#000000", "#000000", "#000000",
+    "#000000", "#000000", "#000000", "#000000", "#000000",
+    "#000000", "#000000", "#000000", "#000000", "#000000",
+    "#000000", "#000000", "#000000", "#000000", "#000000"
+];
 
-/* 멤버별 기본 아바타 색상 (사진 로드 실패 시 대체용) - 그라데이션 없이 검정 통일 */
-const memberColors = members.map(() => "#111111");
-
-/* 멤버별 기본 프로필 사진 (members 배열과 순서 동일) */
-const defaultPhotos = members.map((_, i) => `assets/m${i + 1}.png`);
+/* 멤버별 기본 프로필 사진 (members 배열과 순서 동일, m1~m25). 이미 assets 폴더에 저장되어 있는 사진을 사용합니다. */
+const defaultPhotos = [
+    "assets/m1.png", "assets/m2.png", "assets/m3.png", "assets/m4.png", "assets/m5.png",
+    "assets/m6.png", "assets/m7.png", "assets/m8.png", "assets/m9.png", "assets/m10.png",
+    "assets/m11.png", "assets/m12.png", "assets/m13.png", "assets/m14.png", "assets/m15.png",
+    "assets/m16.png", "assets/m17.png", "assets/m18.png", "assets/m19.png", "assets/m20.png",
+    "assets/m21.png", "assets/m22.png", "assets/m23.png", "assets/m24.png", "assets/m25.png"
+];
 
 /*
- * 표에 표시할 커플명.
- * [행 멤버][열 멤버] 순서.
- * 칠페스(127)/드페스(DREAM)/잇페스(WISH) 안에서 이미 실제 값이 있던 조합은 그 값을 그대로 가져왔고,
- * 나머지(웨페스 내부 조합 및 유닛을 넘나드는 조합)는 이니셜 두 개를 이어붙인 기본값이에요.
- * 원하는 조합명으로 자유롭게 바꿔서 쓰시면 돼요.
+ * 표에 표시할 커플명. [행 멤버][열 멤버] 순서.
+ * 아직 정해진 이름이 없어서 우선 ownInitials를 이어붙인 기본값(예: 재현+마크 -> "재맠")으로
+ * 전부 채워뒀어요. 원하는 조합명으로 자유롭게 바꿔서 쓰시면 됩니다.
+ * 멤버 순서: 쟈니, 태용, 유타, 쿤, 도영, 텐, 재현, 윈윈, 정우, 마크, 샤오쥔, 헨드리, 런쥔, 제노,
+ *            해찬, 재민, 양양, 천러, 지성, 시온, 리쿠, 유우시, 재희, 료, 사쿠야
+ * 이니셜 순서: ['쟌','툥','윹','쿤','도','텐','재','윈','정','맠','샤','헨','런','젠','동',
+ *              '잼','양','천','성','숀','맄','윳','댕','료','샄']
  */
 const pairNames = [
-    ["쟌쟌", "쟌툥", "쟌윹", "쟌쿤", "쟌도", "쟌텐", "쟌재", "쟌윈", "쟌정", "쟌맠", "쟌샤", "쟌헨", "쟌런", "쟌젠", "쟌동", "쟌잼", "쟌양", "쟌천", "쟌지", "쟌숀", "쟌쿨", "쟌윳", "쟌댕", "쟌료", "쟌샄"],
-    ["툥쟌", "툥툥", "툥윹", "툥쿤", "툥도", "툥텐", "툥재", "툥윈", "툥정", "툥맠", "툥샤", "툥헨", "툥런", "툥젠", "툥동", "툥잼", "툥양", "툥천", "툥지", "툥숀", "툥쿨", "툥윳", "툥댕", "툥료", "툥샄"],
-    ["윹쟌", "윹툥", "윹윹", "윹쿤", "윹도", "윹텐", "윹재", "윹윈", "윹정", "윹맠", "윹샤", "윹헨", "윹런", "윹젠", "윹동", "윹잼", "윹양", "윹천", "윹지", "윹숀", "윹쿨", "윹윳", "윹댕", "윹료", "윹샄"],
-    ["쿤쟌", "쿤툥", "쿤윹", "쿤쿤", "쿤도", "쿤텐", "쿤재", "쿤윈", "쿤정", "쿤맠", "쿤샤", "쿤헨", "쿤런", "쿤젠", "쿤동", "쿤잼", "쿤양", "쿤천", "쿤지", "쿤숀", "쿤쿨", "쿤윳", "쿤댕", "쿤료", "쿤샄"],
-    ["도쟌", "도툥", "도윹", "도쿤", "도도", "도텐", "도재", "도윈", "도정", "도맠", "도샤", "도헨", "도런", "도젠", "도동", "도잼", "도양", "도천", "도지", "도숀", "도쿨", "도윳", "도댕", "도료", "도샄"],
-    ["텐쟌", "텐툥", "텐윹", "텐쿤", "텐도", "텐텐", "텐재", "텐윈", "텐정", "텐맠", "텐샤", "텐헨", "텐런", "텐젠", "텐동", "텐잼", "텐양", "텐천", "텐지", "텐숀", "텐쿨", "텐윳", "텐댕", "텐료", "텐샄"],
-    ["재쟌", "재툥", "재윹", "재쿤", "재도", "재텐", "재재", "재윈", "재정", "재맠", "재샤", "재헨", "재런", "재젠", "재동", "재잼", "재양", "재천", "재지", "재숀", "재쿨", "재윳", "재댕", "재료", "재샄"],
-    ["윈쟌", "윈툥", "윈윹", "윈쿤", "윈도", "윈텐", "윈재", "윈윈", "윈정", "윈맠", "윈샤", "윈헨", "윈런", "윈젠", "윈동", "윈잼", "윈양", "윈천", "윈지", "윈숀", "윈쿨", "윈윳", "윈댕", "윈료", "윈샄"],
-    ["정쟌", "정툥", "정윹", "정쿤", "정도", "정텐", "정재", "정윈", "정정", "정맠", "정샤", "정헨", "정런", "정젠", "정동", "정잼", "정양", "정천", "정지", "정숀", "정쿨", "정윳", "정댕", "정료", "정샄"],
-    ["맠쟌", "맠툥", "맠윹", "맠쿤", "맠도", "맠텐", "맠재", "맠윈", "맠정", "맠맠", "맠샤", "맠헨", "맠런", "맠젠", "맠동", "맠잼", "맠양", "맠천", "맠성", "맠숀", "맠쿨", "맠윳", "맠댕", "맠료", "맠샄"],
-    ["샤쟌", "샤툥", "샤윹", "샤쿤", "샤도", "샤텐", "샤재", "샤윈", "샤정", "샤맠", "샤샤", "샤헨", "샤런", "샤젠", "샤동", "샤잼", "샤양", "샤천", "샤지", "샤숀", "샤쿨", "샤윳", "샤댕", "샤료", "샤샄"],
-    ["헨쟌", "헨툥", "헨윹", "헨쿤", "헨도", "헨텐", "헨재", "헨윈", "헨정", "헨맠", "헨샤", "헨헨", "헨런", "헨젠", "헨동", "헨잼", "헨양", "헨천", "헨지", "헨숀", "헨쿨", "헨윳", "헨댕", "헨료", "헨샄"],
-    ["런쟌", "런툥", "런윹", "런쿤", "런도", "런텐", "런재", "런윈", "런정", "런맠", "런샤", "런헨", "런런", "런젠", "런동", "런잼", "런양", "런천", "런성", "런숀", "런쿨", "런윳", "런댕", "런료", "런샄"],
-    ["젠쟌", "젠툥", "젠윹", "젠쿤", "젠도", "젠텐", "젠재", "젠윈", "젠정", "젠맠", "젠샤", "젠헨", "젠런", "젠젠", "젠동", "젠잼", "젠양", "젠천", "젠성", "젠숀", "젠쿨", "젠윳", "젠댕", "젠료", "젠샄"],
-    ["동쟌", "동툥", "동윹", "동쿤", "동도", "동텐", "동재", "동윈", "동정", "동맠", "동샤", "동헨", "동런", "동젠", "동동", "동잼", "동양", "동천", "동지", "동숀", "동쿨", "동윳", "동댕", "동료", "동샄"],
-    ["잼쟌", "잼툥", "잼윹", "잼쿤", "잼도", "잼텐", "잼재", "잼윈", "잼정", "잼맠", "잼샤", "잼헨", "잼런", "잼젠", "잼동", "잼잼", "잼양", "잼천", "잼성", "잼숀", "잼쿨", "잼윳", "잼댕", "잼료", "잼샄"],
-    ["양쟌", "양툥", "양윹", "양쿤", "양도", "양텐", "양재", "양윈", "양정", "양맠", "양샤", "양헨", "양런", "양젠", "양동", "양잼", "양양", "양천", "양지", "양숀", "양쿨", "양윳", "양댕", "양료", "양샄"],
-    ["천쟌", "천툥", "천윹", "천쿤", "천도", "천텐", "천재", "천윈", "천정", "천맠", "천샤", "천헨", "천런", "천젠", "천동", "천잼", "천양", "천천", "천지", "천숀", "천쿨", "천윳", "천댕", "천료", "천샄"],
-    ["지쟌", "지툥", "지윹", "지쿤", "지도", "지텐", "지재", "지윈", "지정", "성맠", "지샤", "지헨", "성런", "성젠", "지동", "성잼", "지양", "지천", "성성", "지숀", "지쿨", "지윳", "지댕", "지료", "지샄"],
-    ["숀쟌", "숀툥", "숀윹", "숀쿤", "숀도", "숀텐", "숀재", "숀윈", "숀정", "숀맠", "숀샤", "숀헨", "숀런", "숀젠", "숀동", "숀잼", "숀양", "숀천", "숀지", "숀숀", "숀쿨", "온윳", "숀댕", "숀료", "숀샄"],
-    ["쿨쟌", "쿨툥", "쿨윹", "쿨쿤", "쿨도", "쿨텐", "쿨재", "쿨윈", "쿨정", "쿨맠", "쿨샤", "쿨헨", "쿨런", "쿨젠", "쿨동", "쿨잼", "쿨양", "쿨천", "쿨지", "쿨숀", "쿨쿨", "쿨융", "쿨댕", "쿨료", "맄샄"],
-    ["윳쟌", "윳툥", "윳윹", "윳쿤", "윳도", "윳텐", "윳재", "윳윈", "윳정", "윳맠", "윳샤", "윳헨", "윳런", "윳젠", "윳동", "윳잼", "윳양", "윳천", "윳지", "윳숀", "윳쿨", "윳윳", "윳댕", "윳료", "윳샄"],
-    ["댕쟌", "댕툥", "댕윹", "댕쿤", "댕도", "댕텐", "댕재", "댕윈", "댕정", "댕맠", "댕샤", "댕헨", "댕런", "댕젠", "댕동", "댕잼", "댕양", "댕천", "댕지", "댕숀", "댕쿨", "댕윳", "댕댕", "댕료", "댕샄"],
-    ["료쟌", "료툥", "료윹", "료쿤", "료도", "료텐", "료재", "료윈", "료정", "료맠", "료샤", "료헨", "료런", "료젠", "료동", "료잼", "료양", "료천", "료지", "료숀", "료쿨", "료윳", "료댕", "료료", "료샄"],
-    ["샄쟌", "샄툥", "샄윹", "샄쿤", "샄도", "샄텐", "샄재", "샄윈", "샄정", "샄맠", "샄샤", "샄헨", "샄런", "샄젠", "샄동", "샄잼", "샄양", "샄천", "샄지", "샄숀", "샄맄", "샄윳", "샄댕", "샄료", "샄샄"]
+    ["쟌쟌", "쟌툥", "쟌윹", "쟌쿤", "쟌도", "쟌텐", "쟌재", "쟌윈", "쟌정", "쟌맠", "쟌샤", "쟌헨", "쟌런", "쟌젠", "쟌동", "쟌잼", "쟌양", "쟌천", "쟌성", "쟌숀", "쟌맄", "쟌윳", "쟌댕", "쟌료", "쟌샄"],
+    ["툥쟌", "툥툥", "툥윹", "툥쿤", "툥도", "툥텐", "툥재", "툥윈", "툥정", "툥맠", "툥샤", "툥헨", "툥런", "툥젠", "툥동", "툥잼", "툥양", "툥천", "툥성", "툥숀", "툥맄", "툥윳", "툥댕", "툥료", "툥샄"],
+    ["윹쟌", "윹툥", "윹윹", "윹쿤", "윹도", "윹텐", "윹재", "윹윈", "윹정", "윹맠", "윹샤", "윹헨", "윹런", "윹젠", "윹동", "윹잼", "윹양", "윹천", "윹성", "윹숀", "윹맄", "윹윳", "윹댕", "윹료", "윹샄"],
+    ["쿤쟌", "쿤툥", "쿤윹", "쿤쿤", "쿤도", "쿤텐", "쿤재", "쿤윈", "쿤정", "쿤맠", "쿤샤", "쿤헨", "쿤런", "쿤젠", "쿤동", "쿤잼", "쿤양", "쿤천", "쿤성", "쿤숀", "쿤맄", "쿤윳", "쿤댕", "쿤료", "쿤샄"],
+    ["도쟌", "도툥", "도윹", "도쿤", "도도", "도텐", "도재", "도윈", "도정", "도맠", "도샤", "도헨", "도런", "도젠", "도동", "도잼", "도양", "도천", "도성", "도숀", "도맄", "도윳", "도댕", "도료", "도샄"],
+    ["텐쟌", "텐툥", "텐윹", "텐쿤", "텐도", "텐텐", "텐재", "텐윈", "텐정", "텐맠", "텐샤", "텐헨", "텐런", "텐젠", "텐동", "텐잼", "텐양", "텐천", "텐성", "텐숀", "텐맄", "텐윳", "텐댕", "텐료", "텐샄"],
+    ["재쟌", "재툥", "재윹", "재쿤", "재도", "재텐", "재재", "재윈", "재정", "재맠", "재샤", "재헨", "재런", "재젠", "재동", "재잼", "재양", "재천", "재성", "재숀", "재맄", "재윳", "재댕", "재료", "재샄"],
+    ["윈쟌", "윈툥", "윈윹", "윈쿤", "윈도", "윈텐", "윈재", "윈윈", "윈정", "윈맠", "윈샤", "윈헨", "윈런", "윈젠", "윈동", "윈잼", "윈양", "윈천", "윈성", "윈숀", "윈맄", "윈윳", "윈댕", "윈료", "윈샄"],
+    ["정쟌", "정툥", "정윹", "정쿤", "정도", "정텐", "정재", "정윈", "정정", "정맠", "정샤", "정헨", "정런", "정젠", "정동", "정잼", "정양", "정천", "정성", "정숀", "정맄", "정윳", "정댕", "정료", "정샄"],
+    ["맠쟌", "맠툥", "맠윹", "맠쿤", "맠도", "맠텐", "맠재", "맠윈", "맠정", "맠맠", "맠샤", "맠헨", "맠런", "맠젠", "맠동", "맠잼", "맠양", "맠천", "맠성", "맠숀", "맠맄", "맠윳", "맠댕", "맠료", "맠샄"],
+    ["샤쟌", "샤툥", "샤윹", "샤쿤", "샤도", "샤텐", "샤재", "샤윈", "샤정", "샤맠", "샤샤", "샤헨", "샤런", "샤젠", "샤동", "샤잼", "샤양", "샤천", "샤성", "샤숀", "샤맄", "샤윳", "샤댕", "샤료", "샤샄"],
+    ["헨쟌", "헨툥", "헨윹", "헨쿤", "헨도", "헨텐", "헨재", "헨윈", "헨정", "헨맠", "헨샤", "헨헨", "헨런", "헨젠", "헨동", "헨잼", "헨양", "헨천", "헨성", "헨숀", "헨맄", "헨윳", "헨댕", "헨료", "헨샄"],
+    ["런쟌", "런툥", "런윹", "런쿤", "런도", "런텐", "런재", "런윈", "런정", "런맠", "런샤", "런헨", "런런", "런젠", "런동", "런잼", "런양", "런천", "런성", "런숀", "런맄", "런윳", "런댕", "런료", "런샄"],
+    ["젠쟌", "젠툥", "젠윹", "젠쿤", "젠도", "젠텐", "젠재", "젠윈", "젠정", "젠맠", "젠샤", "젠헨", "젠런", "젠젠", "젠동", "젠잼", "젠양", "젠천", "젠성", "젠숀", "젠맄", "젠윳", "젠댕", "젠료", "젠샄"],
+    ["동쟌", "동툥", "동윹", "동쿤", "동도", "동텐", "동재", "동윈", "동정", "동맠", "동샤", "동헨", "동런", "동젠", "동동", "동잼", "동양", "동천", "동성", "동숀", "동맄", "동윳", "동댕", "동료", "동샄"],
+    ["잼쟌", "잼툥", "잼윹", "잼쿤", "잼도", "잼텐", "잼재", "잼윈", "잼정", "잼맠", "잼샤", "잼헨", "잼런", "잼젠", "잼동", "잼잼", "잼양", "잼천", "잼성", "잼숀", "잼맄", "잼윳", "잼댕", "잼료", "잼샄"],
+    ["양쟌", "양툥", "양윹", "양쿤", "양도", "양텐", "양재", "양윈", "양정", "양맠", "양샤", "양헨", "양런", "양젠", "양동", "양잼", "양양", "양천", "양성", "양숀", "양맄", "양윳", "양댕", "양료", "양샄"],
+    ["천쟌", "천툥", "천윹", "천쿤", "천도", "천텐", "천재", "천윈", "천정", "천맠", "천샤", "천헨", "천런", "천젠", "천동", "천잼", "천양", "천천", "천성", "천숀", "천맄", "천윳", "천댕", "천료", "천샄"],
+    ["성쟌", "성툥", "성윹", "성쿤", "성도", "성텐", "성재", "성윈", "성정", "성맠", "성샤", "성헨", "성런", "성젠", "성동", "성잼", "성양", "성천", "성성", "성숀", "성맄", "성윳", "성댕", "성료", "성샄"],
+    ["숀쟌", "숀툥", "숀윹", "숀쿤", "숀도", "숀텐", "숀재", "숀윈", "숀정", "숀맠", "숀샤", "숀헨", "숀런", "숀젠", "숀동", "숀잼", "숀양", "숀천", "숀성", "숀숀", "숀맄", "숀윳", "숀댕", "숀료", "숀샄"],
+    ["맄쟌", "맄툥", "맄윹", "맄쿤", "맄도", "맄텐", "맄재", "맄윈", "맄정", "맄맠", "맄샤", "맄헨", "맄런", "맄젠", "맄동", "맄잼", "맄양", "맄천", "맄성", "맄숀", "맄맄", "맄윳", "맄댕", "맄료", "맄샄"],
+    ["윳쟌", "윳툥", "윳윹", "윳쿤", "윳도", "윳텐", "윳재", "윳윈", "윳정", "윳맠", "윳샤", "윳헨", "윳런", "윳젠", "윳동", "윳잼", "윳양", "윳천", "윳성", "윳숀", "윳맄", "윳윳", "윳댕", "윳료", "윳샄"],
+    ["댕쟌", "댕툥", "댕윹", "댕쿤", "댕도", "댕텐", "댕재", "댕윈", "댕정", "댕맠", "댕샤", "댕헨", "댕런", "댕젠", "댕동", "댕잼", "댕양", "댕천", "댕성", "댕숀", "댕맄", "댕윳", "댕댕", "댕료", "댕샄"],
+    ["료쟌", "료툥", "료윹", "료쿤", "료도", "료텐", "료재", "료윈", "료정", "료맠", "료샤", "료헨", "료런", "료젠", "료동", "료잼", "료양", "료천", "료성", "료숀", "료맄", "료윳", "료댕", "료료", "료샄"],
+    ["샄쟌", "샄툥", "샄윹", "샄쿤", "샄도", "샄텐", "샄재", "샄윈", "샄정", "샄맠", "샄샤", "샄헨", "샄런", "샄젠", "샄동", "샄잼", "샄양", "샄천", "샄성", "샄숀", "샄맄", "샄윳", "샄댕", "샄료", "샄샄"]
 ];
 
 const options = [
     { name: "OTP",      color: "#f7cde0" },
     { name: "좋아함",   color: "#ffafaf" },
     { name: "호감",     color: "#fcee90" },
-    { name: "가능", color: "#baebbb" },
+    { name: "관심있음", color: "#baebbb" },
     { name: "관심없음", color: "#ffffff" },
     { name: "별로",     color: "#bfeefd" },
     { name: "지뢰",     color: "#999999" }
@@ -65,7 +109,7 @@ const options = [
 /* 사용자가 직접 고른 커스텀 색상 (name -> hex).
    여기에 값이 있으면 기본 color 대신 이 색을 쓴다.
    options 배열의 기본값 자체는 절대 덮어쓰지 않는다. */
-const CUSTOM_COLOR_KEY = "npace-custom-colors";
+const CUSTOM_COLOR_KEY = "enfes-custom-colors";
 let customColors = JSON.parse(localStorage.getItem(CUSTOM_COLOR_KEY)) || {};
 
 function getOptionColor(option) {
@@ -82,19 +126,15 @@ function resetCustomColors() {
     localStorage.removeItem(CUSTOM_COLOR_KEY);
 }
 
-const STORAGE_KEY = "npace-enpes-rps";
-const LR_STORAGE_KEY = "npace-lr-rps";
+const STORAGE_KEY = "enfes-alpes-rps";
+const LR_STORAGE_KEY = "enfes-lr-rps";
 const LR_CELL_COUNT = 12;
 
 /* 행/열 개별 숨기기 상태 (멤버 인덱스 기준, rows/cols 따로 관리) */
-const HIDDEN_KEY = "npace-hidden-members";
+const HIDDEN_KEY = "enfes-hidden-members";
 const hiddenSaved = JSON.parse(localStorage.getItem(HIDDEN_KEY)) || { rows: [], cols: [] };
 let hiddenRows = new Set(hiddenSaved.rows);
 let hiddenCols = new Set(hiddenSaved.cols);
-
-function isMemberActive() {
-    return true;
-}
 
 function saveHiddenState() {
     localStorage.setItem(HIDDEN_KEY, JSON.stringify({
@@ -103,66 +143,18 @@ function saveHiddenState() {
     }));
 }
 
-/* 자공자수(본인조합, 대각선 칸) 표시 여부 - 체크박스로 켜고 끔 */
-const SELF_PAIR_KEY = "npace-include-selfpair";
+/* 자공자수(본인조합, 대각선 칸) 표시 여부 - 체크박스로 켜고 끔
+   기본값은 켜짐(기존 동작과 동일)이라, 꺼본 적 없는 사용자는 "0"이 저장돼 있지 않다. */
+const SELF_PAIR_KEY = "enfes-include-selfpair";
 let includeSelfPair = localStorage.getItem(SELF_PAIR_KEY) !== "0";
 
+/* 대각선(본인×본인) 칸을 표시할지 여부에 따라 실제로 화면/이미지에 그릴 텍스트를 반환한다.
+   토글이 꺼져 있으면 "-"를 보여준다. */
 function getDisplayPairName(rowIndex, colIndex) {
     if (rowIndex === colIndex && !includeSelfPair) {
         return "-";
     }
     return pairNames[rowIndex][colIndex];
-}
-
-/* ==========================================
-   그룹 전환 (엔페스 / 칠페스 / 드페스 / 웨페스 / 잇페스)
-   엔페스를 제외한 나머지 4개는 각 유닛 공식 취향표 주소로 이동한다.
-========================================== */
-const GROUP_LINKS = {
-    "127":  "https://favhyeon.github.io/NCT127-rps-chart/",
-    "wish": "https://favhyeon.github.io/NCTWISH-RPS-CHART/",
-    "dream":"https://favhyeon.github.io/NCTDREAM-rps-chart/",
-    "wayv": "https://favhyeon.github.io/NCTWayV-rps-chart/"
-};
-
-const groupCheckboxes = {
-    enpes: document.getElementById("groupEnpes"),
-    chil:  document.getElementById("groupChil"),
-    deu:   document.getElementById("groupDeu"),
-    we:    document.getElementById("groupWe"),
-    it:    document.getElementById("groupIt")
-};
-
-function setupGroupSwitcher() {
-    const all = Object.values(groupCheckboxes).filter(Boolean);
-    if (!all.length) return;
-
-    if (groupCheckboxes.enpes) groupCheckboxes.enpes.checked = true;
-
-    all.forEach(cb => {
-        cb.addEventListener("change", () => {
-            if (!cb.checked) {
-                // 하나는 항상 켜져 있어야 하므로, 자기 자신을 못 끄게 막는다.
-                cb.checked = true;
-                return;
-            }
-
-            all.forEach(other => {
-                if (other !== cb) other.checked = false;
-            });
-
-            if (cb === groupCheckboxes.chil) {
-                window.location.href = GROUP_LINKS["127"];
-            } else if (cb === groupCheckboxes.deu) {
-                window.location.href = GROUP_LINKS["dream"];
-            } else if (cb === groupCheckboxes.we) {
-                window.location.href = GROUP_LINKS["wayv"];
-            } else if (cb === groupCheckboxes.it) {
-                window.location.href = GROUP_LINKS["wish"];
-            }
-            /* 엔페스를 다시 선택한 경우는 현재 페이지이므로 아무 것도 하지 않는다. */
-        });
-    });
 }
 
 const table = document.getElementById("chartTable");
@@ -198,13 +190,27 @@ const lrGrid = document.getElementById("lrGrid");
 const photoInput = document.getElementById("photoInput");
 const scaleWrap = document.getElementById("scaleWrap");
 
+/* CSS의 @media (max-width: 768px)과 동일한 기준.
+   이 폭 이하에서는 JS로 축소하지 않고, 반응형 레이아웃을 그대로 사용한다. */
 const MOBILE_BREAKPOINT = 768;
-const DESKTOP_CAPTURE_WIDTH = 1100;
 
-let currentTarget = null;
+/* 탭마다 캡처(저장) 기준 폭이 다르다.
+   - 알페스 취향표: 25명이라 넓은 2400px
+   - 공수 취향표: 5-5-5-5-5(5열) 배치라 더 넓은 2500px
+   CSS의 #captureArea / #captureAreaLr width 값과 항상 같아야 한다. */
+const CAPTURE_WIDTH = {
+    rps: 2400,
+    lr: 2500
+};
+
+function getCaptureWidth(tab) {
+    return CAPTURE_WIDTH[tab] || CAPTURE_WIDTH.rps;
+}
+
+let currentTarget = null; // { type: "cell", td } | { type: "row", index } | { type: "col", index }
 let currentTab = "rps";
 let currentPhotoIndex = null;
-let currentBlobUrl = null;
+let currentBlobUrl = null; // 저장 미리보기/다운로드에 쓰이는 Blob URL (재사용 전 해제)
 
 const HISTORY_LIMIT = 50;
 let historyStack = [];
@@ -239,6 +245,8 @@ function renderGuide(tab) {
     });
 }
 
+/* 범례를 options 배열(+커스텀 색상) 기준으로 매번 새로 그린다.
+   색이 바뀌어도 범례가 항상 실제 색과 일치하도록. */
 function renderLegend() {
     if (!legendRps) return;
     legendRps.innerHTML = "";
@@ -288,7 +296,54 @@ if (selfPairToggle) {
     });
 }
 
-setupGroupSwitcher();
+/* ==========================================
+   서브 유닛 전환 (엔페스 / 칠페스 / 드페스 / 웨페스 / 잇페스)
+   엔페스: 이 사이트(127+드림+웨이션브이+위시 25명 전체).
+   칠페스: NCT127, 드페스: NCT DREAM, 웨페스: NCT WayV, 잇페스: NCT WISH
+   체크박스 5개는 라디오처럼 한 번에 하나만 선택되고, 다른 유닛을 선택하면
+   해당 그룹의 취향표 주소로 이동한다. 배포 주소가 확정되면 enfes 값을
+   실제 배포 주소로 바꿔주세요.
+========================================== */
+
+const CURRENT_UNIT = "enfes";
+
+const UNIT_URLS = {
+    enfes: "https://favhyeon.github.io/NCT-rps-chart/",
+    chil: "https://favhyeon.github.io/NCT127-rps-chart/",
+    deu: "https://favhyeon.github.io/NCTDREAM-rps-chart/",
+    we: "https://favhyeon.github.io/NCTWayV-rps-chart/",
+    it: "https://favhyeon.github.io/NCTWISH-RPS-CHART/"
+};
+
+const unitCheckboxes = document.querySelectorAll('input[name="unitSelect"]');
+
+unitCheckboxes.forEach(checkbox => {
+    if (checkbox.value === CURRENT_UNIT) {
+        checkbox.checked = true;
+    }
+
+    checkbox.addEventListener("change", () => {
+        if (!checkbox.checked) {
+            // 체크박스 하나는 항상 켜져 있어야 하므로 스스로 끄는 건 막는다.
+            checkbox.checked = true;
+            return;
+        }
+
+        // 라디오처럼: 이 체크박스만 켜고 나머지는 전부 끈다.
+        unitCheckboxes.forEach(other => {
+            if (other !== checkbox) other.checked = false;
+        });
+
+        const target = checkbox.value;
+        if (target === CURRENT_UNIT) return;
+
+        const url = UNIT_URLS[target];
+        if (url) {
+            window.location.href = url;
+        }
+    });
+});
+
 createTable();
 createLrGrid();
 updateNavButtons();
@@ -323,7 +378,7 @@ tabRps.addEventListener("click", () => switchTab("rps"));
 tabLr.addEventListener("click", () => switchTab("lr"));
 
 /* ==========================================
-   엔페스 취향표 - 표 생성
+   알페스 취향표 - 표 생성
 ========================================== */
 
 function createTable() {
@@ -393,7 +448,7 @@ function createTable() {
 }
 
 /* ==========================================
-   엔페스 취향표 - 이전/이후 (실행 취소)
+   알페스 취향표 - 이전/이후 (실행 취소)
 ========================================== */
 
 function pushHistory() {
@@ -458,8 +513,10 @@ function openModal(titleText) {
             <span class="option-label">${option.name}</span>
         `;
 
+        // 카드(동그라미) 클릭 -> 이 색을 셀에 적용
         item.addEventListener("click", () => applySelection(getOptionColor(option)));
 
+        // 연필 아이콘 클릭은 셀 적용과 별개로, 색상 피커만 열기
         const editBtn = item.querySelector(".color-edit-btn");
         const editInput = item.querySelector(".color-edit-input");
         editBtn.addEventListener("click", (e) => e.stopPropagation());
@@ -490,6 +547,8 @@ function openModal(titleText) {
     renderModalExtra(titleText);
 }
 
+/* 모달 하단(색상 기본값 되돌리기 + 행/열 숨기기 체크박스) 영역.
+   모달을 열 때마다 currentTarget 기준으로 다시 그린다. */
 function renderModalExtra(titleText) {
     let modalExtra = document.getElementById("modalExtra");
     if (!modalExtra) {
@@ -622,6 +681,7 @@ function createLrGrid() {
         const row = document.createElement("div");
         row.className = "lr-row";
 
+        /* 아바타 */
         const avatar = document.createElement("div");
         avatar.className = "lr-avatar";
         avatar.dataset.index = index;
@@ -648,6 +708,7 @@ function createLrGrid() {
 
         row.appendChild(avatar);
 
+        /* 오른쪽 내용 (바 + 텍스트) */
         const content = document.createElement("div");
         content.className = "lr-content";
 
@@ -721,9 +782,13 @@ function createLrGrid() {
         lrGrid.appendChild(row);
     });
 
+    /* 저장돼 있던 글이 여러 줄이어도 처음부터 잘리지 않도록,
+       모든 칸을 한 번씩 실제 내용 높이에 맞춰준다. */
     lrGrid.querySelectorAll(".lr-text").forEach(autoResizeTextarea);
 }
 
+/* 칸에 적은 글이 늘어나면 잘리는 대신 칸 자체가 자연스럽게 늘어나도록.
+   grid 행이 auto 높이라 아래 칸들과 겹치지 않고 밀려 내려간다. */
 function autoResizeTextarea(el) {
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight}px`;
@@ -744,6 +809,7 @@ function saveLrData() {
     localStorage.setItem(LR_STORAGE_KEY, JSON.stringify(lrData));
 }
 
+/* 사진 업로드 */
 photoInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file || currentPhotoIndex === null) return;
@@ -800,8 +866,11 @@ saveBtn.addEventListener("click", async () => {
     tabWrap.style.display = "none";
     dateToggleWrap.style.display = "none";
 
+    /* 안내 문구, 이전/이후 버튼은 이미지에는 나오지 않도록 캡처 중에만 숨김 */
     area.classList.add("capturing");
 
+    /* 화면(특히 모바일)에 적용돼 있던 축소/반응형 스타일을 잠시 걷어내고,
+       항상 PC 버전과 동일한 레이아웃으로 저장되도록 한다. */
     const prevTransform = area.style.transform;
     area.style.transform = "none";
 
@@ -811,8 +880,14 @@ saveBtn.addEventListener("click", async () => {
             scale: 4,
             useCORS: true,
             logging: false,
-            windowWidth: DESKTOP_CAPTURE_WIDTH,
+            windowWidth: getCaptureWidth(currentTab),
             windowHeight: Math.max(area.scrollHeight, 1600),
+            /*
+             * html2canvas는 textarea 안의 줄바꿈/자동 줄바꿈을 제대로
+             * 그리지 못해서(한 줄로만 렌더링되며 잘려 보임), 캡처용으로
+             * 복제된 문서 안에서만 textarea를 똑같이 생긴 div로 바꿔치기한다.
+             * 실제 화면의 textarea(입력 가능 상태)는 건드리지 않는다.
+             */
             onclone: (clonedDoc) => {
                 clonedDoc.querySelectorAll(".lr-text").forEach((ta) => {
                     const div = clonedDoc.createElement("div");
@@ -826,6 +901,14 @@ saveBtn.addEventListener("click", async () => {
             }
         });
 
+        /*
+         * data: URL 대신 Blob URL을 사용한다.
+         * 표가 커지고 고화질(scale 4)로 캡처하면서 이미지 용량이 커졌는데,
+         * 아이폰 사파리는 큰 data: URL을 <a download>로 다운로드할 때
+         * "다운로드하시겠습니까?" 확인창까지만 뜨고 실제 저장은 안 되는
+         * 경우가 있다. Blob URL은 이런 용량 제한 없이 정상적인
+         * 다운로드(하단 진행 표시 → 다운로드 항목 저장)로 이어진다.
+         */
         const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 
         if (!blob) {
@@ -840,11 +923,11 @@ saveBtn.addEventListener("click", async () => {
         previewImage.src = currentBlobUrl;
         saveModal.classList.remove("hidden");
 
-        const fileLabel = currentTab === "rps" ? "엔페스_취향표" : "공수_취향표";
+        const fileLabel = currentTab === "rps" ? "알페스_취향표" : "공수_취향표";
 
         const link = document.createElement("a");
         link.href = currentBlobUrl;
-        link.download = `NPACE_${fileLabel}.png`;
+        link.download = `엔페스_${fileLabel}.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -891,6 +974,8 @@ function fitCaptureArea() {
     );
 
     if (screenWidth <= MOBILE_BREAKPOINT) {
+        /* 모바일: 축소 대신 CSS 반응형 레이아웃을 그대로 사용하고,
+           세로로 길어진 내용은 화면을 드래그해서 내려보는 방식으로 확인한다. */
         area.style.transform = "none";
         area.style.transformOrigin = "";
         wrap.style.width = "";
@@ -898,12 +983,13 @@ function fitCaptureArea() {
         return;
     }
 
-    const scale = Math.min(1, screenWidth / DESKTOP_CAPTURE_WIDTH);
+    const captureWidth = getCaptureWidth(currentTab);
+    const scale = Math.min(1, screenWidth / captureWidth);
 
     area.style.transformOrigin = "top left";
     area.style.transform = `scale(${scale})`;
 
-    wrap.style.width = `${DESKTOP_CAPTURE_WIDTH * scale}px`;
+    wrap.style.width = `${captureWidth * scale}px`;
     wrap.style.height = `${area.scrollHeight * scale}px`;
 }
 
