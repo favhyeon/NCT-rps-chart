@@ -191,6 +191,7 @@ const guideListLr = document.getElementById("guideListLr");
 const legendRps = document.getElementById("legendRps");
 
 const dateToggleWrap = document.getElementById("dateToggleWrap");
+const markWinwinWrap = document.getElementById("markWinwinWrap");
 const dateToggle = document.getElementById("dateToggle");
 const dateTextRps = document.getElementById("dateTextRps");
 const dateTextLr = document.getElementById("dateTextLr");
@@ -979,6 +980,7 @@ saveBtn.addEventListener("click", async () => {
     buttonWrap.style.display = "none";
     tabWrap.style.display = "none";
     dateToggleWrap.style.display = "none";
+    markWinwinWrap.style.display = "none";
 
     /* 안내 문구, 이전/이후 버튼은 이미지에는 나오지 않도록 캡처 중에만 숨김 */
     area.classList.add("capturing");
@@ -1036,6 +1038,7 @@ saveBtn.addEventListener("click", async () => {
         buttonWrap.style.display = "flex";
         tabWrap.style.display = "flex";
         dateToggleWrap.style.display = "flex";
+        markWinwinWrap.style.display = "flex";
     }
 });
 
