@@ -18,14 +18,46 @@
 
 <div class="page">
 
-    <header class="page-header">
-        <h1>엔페스 통합 취향표<span id="dateTextRps" class="date-ver"></span></h1>
-        <p class="page-sub">NCT 127 · WayV · DREAM · WISH — 25인</p>
-    </header>
-
     <div class="tab-wrap">
         <button id="tabRps" class="tab-btn active">취향표</button>
         <button id="tabLr" class="tab-btn">공수 취향표</button>
+    </div>
+
+    <div class="logo-wrap">
+        <img src="assets/logo.png" alt="NCT" class="brand-logo" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'brand-logo-fallback',textContent:'NCT'}))">
+    </div>
+
+    <header class="page-header">
+        <h1>엔페스 취향표<span id="dateTextRps" class="date-ver"></span></h1>
+        <p class="page-sub">NCT 127 · WayV · DREAM · WISH — 25인</p>
+    </header>
+
+    <div class="guide-box" id="guideListRps"></div>
+
+    <div class="scale-wrap" id="scaleWrap">
+        <!-- ===================== RPS 취향표 ===================== -->
+        <div class="capture-area" id="captureArea">
+            <div class="capture-title">
+                <h2>엔페스 취향표</h2>
+            </div>
+
+            <div class="table-wrap">
+                <table id="chartTable"></table>
+            </div>
+
+            <div class="legend" id="legendRps"></div>
+        </div>
+
+        <!-- ===================== 공수(L-R) 취향표 ===================== -->
+        <div class="capture-area hidden" id="captureAreaLr">
+            <div class="capture-title">
+                <h2>엔페스 공수 취향표<span id="dateTextLr" class="date-ver"></span></h2>
+            </div>
+
+            <div class="guide-box lr-guide" id="guideListLr"></div>
+
+            <div class="lr-grid" id="lrGrid"></div>
+        </div>
     </div>
 
     <div class="toggle-row">
@@ -62,34 +94,6 @@
                 <input type="checkbox" id="groupIt">
                 <span>잇페스</span>
             </label>
-        </div>
-    </div>
-
-    <div class="guide-box" id="guideListRps"></div>
-
-    <div class="scale-wrap" id="scaleWrap">
-        <!-- ===================== RPS 취향표 ===================== -->
-        <div class="capture-area" id="captureArea">
-            <div class="capture-title">
-                <h2>엔페스 취향표</h2>
-            </div>
-
-            <div class="table-wrap">
-                <table id="chartTable"></table>
-            </div>
-
-            <div class="legend" id="legendRps"></div>
-        </div>
-
-        <!-- ===================== 공수(L-R) 취향표 ===================== -->
-        <div class="capture-area hidden" id="captureAreaLr">
-            <div class="capture-title">
-                <h2>엔페스 공수 취향표<span id="dateTextLr" class="date-ver"></span></h2>
-            </div>
-
-            <div class="guide-box lr-guide" id="guideListLr"></div>
-
-            <div class="lr-grid" id="lrGrid"></div>
         </div>
     </div>
 
